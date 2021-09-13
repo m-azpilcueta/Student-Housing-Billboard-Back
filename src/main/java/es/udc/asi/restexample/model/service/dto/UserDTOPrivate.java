@@ -1,10 +1,19 @@
 package es.udc.asi.restexample.model.service.dto;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 import es.udc.asi.restexample.model.domain.User;
 
 public class UserDTOPrivate {
   private Long id;
+  
+  @NotEmpty
+  @Size(min = 4)
   private String login;
+  
+  @NotEmpty
+  @Size(min = 4)
   private String password;
   private String authority;
 
