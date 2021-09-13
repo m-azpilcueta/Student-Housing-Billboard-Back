@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import es.udc.asi.restexample.web.exceptions.CredentialsAreNotValidException;
 import es.udc.asi.restexample.web.exceptions.ResourceException;
-import io.jsonwebtoken.ExpiredJwtException;
 
 @ControllerAdvice
 public class GlobalControllerExceptionHandler {
@@ -28,13 +27,6 @@ public class GlobalControllerExceptionHandler {
   @ResponseStatus(HttpStatus.UNAUTHORIZED)
   @ResponseBody
   public ErrorDTO badCredentialsExceptionHandler(CredentialsAreNotValidException e) {
-    return new ErrorDTO("Bad Credentials");
-  }
-
-  @ExceptionHandler(ExpiredJwtException.class)
-  @ResponseStatus(HttpStatus.UNAUTHORIZED)
-  @ResponseBody
-  public ErrorDTO ExpiredJwtExceptionHandler(ExpiredJwtException e) {
     return new ErrorDTO("Bad Credentials");
   }
 

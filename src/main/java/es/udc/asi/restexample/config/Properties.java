@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "properties")
 public class Properties {
+  // Necesario para usarlo en JWTFilter
+  public static String CLIENT_HOST;
+
   private String clientHost;
   private String jwtSecretKey;
   private Long jwtValidity;
@@ -15,6 +18,7 @@ public class Properties {
   }
 
   public void setClientHost(String clientHost) {
+    Properties.CLIENT_HOST = clientHost;
     this.clientHost = clientHost;
   }
 
