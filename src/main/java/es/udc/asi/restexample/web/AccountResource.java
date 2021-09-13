@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +26,7 @@ import es.udc.asi.restexample.security.JWTConfigurer;
 import es.udc.asi.restexample.security.JWTToken;
 import es.udc.asi.restexample.security.TokenProvider;
 import es.udc.asi.restexample.web.exceptions.CredentialsAreNotValidException;
+import es.udc.asi.restexample.web.exceptions.RequestBodyNotValidException;
 
 /**
  * Este controlador va por separado que el UserResource porque se encarga de
@@ -72,7 +74,12 @@ public class AccountResource {
   }
 
   @PostMapping("/register")
-  public void registerAccount(@Valid @RequestBody UserDTOPrivate account) throws UserLoginExistsException {
+  public void registerAccount(@Valid @RequestBody UserDTOPrivate account, Errors errors)
+      throws UserLoginExistsException, RequestBodyNotValidException {
+    if (errors.hasErrors()) {
+      throw new RequestBodyNotValidException(errors);
+    }
+
     userService.registerUser(account.getLogin(), account.getPassword());
   }
 }
