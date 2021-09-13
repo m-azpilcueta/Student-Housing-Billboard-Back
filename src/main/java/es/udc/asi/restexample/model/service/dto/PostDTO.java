@@ -18,7 +18,7 @@ public class PostDTO {
   private String body;
   @NotNull
   private UserDTOPublic author;
-  private List<TagDTO> tags;
+  private List<TagDTO> tags = new ArrayList<>();
 
   public PostDTO() {
   }
@@ -28,7 +28,6 @@ public class PostDTO {
     this.title = post.getTitle();
     this.body = post.getBody();
     this.author = new UserDTOPublic(post.getAuthor());
-    this.tags = new ArrayList<>();
     post.getTags().forEach(t -> {
       this.tags.add(new TagDTO(t));
     });
