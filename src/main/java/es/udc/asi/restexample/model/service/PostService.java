@@ -35,7 +35,7 @@ public class PostService {
   public PostDTO findById(Long id) throws NotFoundException {
     Post post = postDAO.findById(id);
     if (post == null) {
-      throw new NotFoundException("post with id " + id + " not found!");
+      throw new NotFoundException(id.toString(), Post.class);
     }
     return new PostDTO(postDAO.findById(id));
   }

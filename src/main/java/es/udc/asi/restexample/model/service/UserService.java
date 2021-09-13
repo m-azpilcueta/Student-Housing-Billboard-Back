@@ -38,7 +38,7 @@ public class UserService {
   @Transactional(readOnly = false)
   public void registerUser(String login, String password, boolean isAdmin) throws UserLoginExistsException {
     if (userDAO.findByLogin(login) != null) {
-      throw new UserLoginExistsException("User login " + login + " already exists");
+      throw new UserLoginExistsException(login);
     }
 
     User user = new User();
