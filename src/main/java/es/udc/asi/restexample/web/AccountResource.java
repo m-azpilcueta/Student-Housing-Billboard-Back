@@ -5,7 +5,6 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,7 +21,6 @@ import es.udc.asi.restexample.model.exception.UserLoginExistsException;
 import es.udc.asi.restexample.model.service.UserService;
 import es.udc.asi.restexample.model.service.dto.LoginDTO;
 import es.udc.asi.restexample.model.service.dto.UserDTOPrivate;
-import es.udc.asi.restexample.security.JWTConfigurer;
 import es.udc.asi.restexample.security.JWTToken;
 import es.udc.asi.restexample.security.TokenProvider;
 import es.udc.asi.restexample.web.exceptions.CredentialsAreNotValidException;
@@ -59,8 +57,6 @@ public class AccountResource {
       Authentication authentication = authenticationManager.authenticate(authenticationToken);
       SecurityContextHolder.getContext().setAuthentication(authentication);
       String jwt = tokenProvider.createToken(authentication);
-      HttpHeaders httpHeaders = new HttpHeaders();
-      httpHeaders.add(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + jwt);
       return new JWTToken(jwt);
     } catch (AuthenticationException e) {
       logger.warn(e.getMessage(), e);
