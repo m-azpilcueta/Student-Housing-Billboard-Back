@@ -1,5 +1,6 @@
 package es.udc.asi.restexample.model.domain;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,6 +25,8 @@ public class Post {
 
   @Column(length = 10485760)
   private String body;
+
+  private LocalDateTime timestamp = LocalDateTime.now();
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   private User author;
@@ -66,6 +69,14 @@ public class Post {
 
   public void setBody(String body) {
     this.body = body;
+  }
+
+  public LocalDateTime getTimestamp() {
+    return timestamp;
+  }
+
+  public void setTimestamp(LocalDateTime timestamp) {
+    this.timestamp = timestamp;
   }
 
   public User getAuthor() {
