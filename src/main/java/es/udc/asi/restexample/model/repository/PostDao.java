@@ -14,4 +14,6 @@ public interface PostDao {
   void update(Post post);
 
   void deleteById(Long id);
+
+  List<Post> findAllByTag(Long tagId);
 }
