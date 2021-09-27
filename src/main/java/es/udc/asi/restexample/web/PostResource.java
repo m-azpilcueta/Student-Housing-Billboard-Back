@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.udc.asi.restexample.model.domain.Post;
 import es.udc.asi.restexample.model.exception.NotFoundException;
+import es.udc.asi.restexample.model.exception.OperationNotAllowed;
 import es.udc.asi.restexample.model.service.PostService;
 import es.udc.asi.restexample.model.service.dto.PostDTO;
 import es.udc.asi.restexample.web.exceptions.IdAndBodyNotMatchingOnUpdateException;
@@ -62,7 +63,7 @@ public class PostResource {
   }
 
   @DeleteMapping("/{id}")
-  public void delete(@PathVariable Long id) {
+  public void delete(@PathVariable Long id) throws NotFoundException, OperationNotAllowed {
     postService.deleteById(id);
   }
 
