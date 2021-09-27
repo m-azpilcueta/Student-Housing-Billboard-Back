@@ -32,6 +32,8 @@ public class User {
 
   @OneToMany(mappedBy = "author")
   private List<Post> posts = new ArrayList<>();
+  
+  private boolean active = true;
 
   public User() {
   }
@@ -74,5 +76,13 @@ public class User {
 
   public void setPosts(List<Post> posts) {
     this.posts = posts;
+  }
+
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(boolean active) {
+    this.active = active;
   }
 }

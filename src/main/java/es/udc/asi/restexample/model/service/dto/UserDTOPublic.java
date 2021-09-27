@@ -5,6 +5,7 @@ import es.udc.asi.restexample.model.domain.User;
 public class UserDTOPublic {
   private Long id;
   private String login;
+  private boolean active = true;
 
   public UserDTOPublic() {
   }
@@ -12,6 +13,7 @@ public class UserDTOPublic {
   public UserDTOPublic(User user) {
     this.id = user.getId();
     this.login = user.getLogin();
+    this.setActive(user.isActive());
   }
 
   public Long getId() {
@@ -28,5 +30,13 @@ public class UserDTOPublic {
 
   public void setLogin(String login) {
     this.login = login;
+  }
+
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(boolean active) {
+    this.active = active;
   }
 }
