@@ -12,4 +12,6 @@ public interface UserDao {
   User findByLogin(String login);
 
   void create(User user);
+
+  void update(User user);
 }
