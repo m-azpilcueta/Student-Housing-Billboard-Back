@@ -24,4 +24,9 @@ public class TagDaoJpa extends GenericDaoJpa implements TagDao {
   public void create(Tag tag) {
     entityManager.persist(tag);
   }
+
+  @Override
+  public void delete(Tag tag) {
+    entityManager.remove(tag);
+  }
 }
