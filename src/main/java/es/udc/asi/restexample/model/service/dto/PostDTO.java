@@ -19,6 +19,7 @@ public class PostDTO {
   @NotNull
   private UserDTOPublic author;
   private List<TagDTO> tags = new ArrayList<>();
+  private Boolean hasImage = false;
 
   public PostDTO() {
   }
@@ -32,6 +33,9 @@ public class PostDTO {
       this.tags.add(new TagDTO(t));
     });
     this.tags.sort(Comparator.comparing(TagDTO::getName));
+    if (post.getImagePath() != null) {
+      this.hasImage = true;
+    }
   }
 
   public Long getId() {
@@ -72,5 +76,9 @@ public class PostDTO {
 
   public void setTags(List<TagDTO> tags) {
     this.tags = tags;
+  }
+
+  public Boolean getHasImage() {
+    return hasImage;
   }
 }

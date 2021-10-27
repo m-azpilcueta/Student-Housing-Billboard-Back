@@ -33,6 +33,8 @@ public class Post {
 
   @ManyToMany(fetch = FetchType.LAZY)
   private Set<Tag> tags = new HashSet<>();
+  
+  private String imagePath;
 
   public Post() {
   }
@@ -93,5 +95,13 @@ public class Post {
 
   public void setTags(Set<Tag> tags) {
     this.tags = tags;
+  }
+
+  public String getImagePath() {
+    return imagePath;
+  }
+
+  public void setImagePath(String imagePath) {
+    this.imagePath = imagePath;
   }
 }

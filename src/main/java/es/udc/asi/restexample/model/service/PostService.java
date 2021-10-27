@@ -4,25 +4,33 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.management.InstanceNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import es.udc.asi.restexample.model.domain.Post;
+import es.udc.asi.restexample.model.exception.ModelException;
 import es.udc.asi.restexample.model.exception.NotFoundException;
 import es.udc.asi.restexample.model.exception.OperationNotAllowed;
 import es.udc.asi.restexample.model.repository.PostDao;
 import es.udc.asi.restexample.model.repository.TagDao;
 import es.udc.asi.restexample.model.repository.UserDao;
+import es.udc.asi.restexample.model.service.dto.ImageDTO;
 import es.udc.asi.restexample.model.service.dto.PostDTO;
 import es.udc.asi.restexample.model.service.dto.UserDTOPrivate;
+import es.udc.asi.restexample.model.service.util.ImageService;
 
 @Service
 @Transactional(readOnly = true, rollbackFor = Exception.class)
 public class PostService {
   @Autowired
   private PostDao postDAO;
+  @Autowired
+  private ImageService imageService;
 
   @Autowired
   private UserDao userDAO;
@@ -88,12 +96,31 @@ public class PostService {
     if (!currentUser.getId().equals(post.getAuthor().getId())) {
       throw new OperationNotAllowed("Current user is not the post creator");
     }
-    
+
     LocalDateTime halfAnHourAgo = LocalDateTime.now().minusMinutes(30);
     if (post.getTimestamp().isBefore(halfAnHourAgo)) {
       throw new OperationNotAllowed("More than half an hour has passed since the post creation");
     }
 
     postDAO.deleteById(id);
+  }
+  
+  @Transactional(readOnly = false, rollbackFor = Exception.class)
+  public void savePostImageById(Long id, MultipartFile file)
+      throws InstanceNotFoundException, ModelException {
+
+    Post post = postDAO.findById(id);
+    if (post == null) throw new NotFoundException(id.toString(), Post.class);
+
+    String filePath = imageService.saveImage(file, post.getId());
+    post.setImagePath(filePath);
+    postDAO.update(post);
+  }
+
+  public ImageDTO getPostImageById(Long id) throws InstanceNotFoundException, ModelException {
+    Post post = postDAO.findById(id);
+    if (post == null) throw new NotFoundException(id.toString(), Post.class);
+
+    return imageService.getImage(post.getImagePath(), post.getId());
   }
 }

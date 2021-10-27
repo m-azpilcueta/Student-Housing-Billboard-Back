@@ -27,4 +27,5 @@ properties:
   clientHost: http://localhost:1234
   jwtSecretKey: sdfgsdgsdfgsdfgdsfgdfgsdfgsdgsdf
   jwtValidity: 7200
+  imagesPath: /tmp/images/
    
