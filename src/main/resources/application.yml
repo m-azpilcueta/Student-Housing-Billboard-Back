@@ -28,4 +28,4 @@ properties:
   jwtSecretKey: sdfgsdgsdfgsdfgdsfgdfgsdfgsdgsdf
   jwtValidity: 7200
   imagesPath: /tmp/images/
-   
+#  imagesPath: C:\\Users\\Public\\Pictures\\asi\\
