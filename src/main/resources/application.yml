@@ -2,7 +2,7 @@ spring:
   datasource:
     host: localhost
     port: 5432
-    database: asi
+    database: asi_p2
     username: asi
     password: asi
     url: jdbc:postgresql://${spring.datasource.host}:${spring.datasource.port}/${spring.datasource.database}
