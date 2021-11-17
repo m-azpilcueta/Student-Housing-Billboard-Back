@@ -27,6 +27,11 @@ public class User {
   @Enumerated(EnumType.STRING)
   private UserAuthority authority;
 
+  private String nombre;
+
+  private String email;
+
+  private String telefonoContacto;
 
   private boolean active = true;
 
