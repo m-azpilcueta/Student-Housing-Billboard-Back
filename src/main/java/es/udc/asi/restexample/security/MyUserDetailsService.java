@@ -33,7 +33,7 @@ public class MyUserDetailsService implements UserDetailsService {
     }
     logger.info("Loaded user {} with authority {}", login, user.getAuthority().name());
     GrantedAuthority authority = new SimpleGrantedAuthority(user.getAuthority().name());
-    return new org.springframework.security.core.userdetails.User(login, user.getPassword(),
+    return new org.springframework.security.core.userdetails.User(login, user.getContrasena(),
         Collections.singleton(authority));
   }
 }

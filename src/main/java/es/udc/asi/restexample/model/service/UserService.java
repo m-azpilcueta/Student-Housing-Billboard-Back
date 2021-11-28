@@ -48,7 +48,7 @@ public class UserService {
     String encryptedPassword = passwordEncoder.encode(password);
 
     user.setLogin(login);
-    user.setPassword(encryptedPassword);
+    user.setContrasena(encryptedPassword);
     user.setAuthority(UserAuthority.USER);
     if (isAdmin) {
       user.setAuthority(UserAuthority.ADMIN);

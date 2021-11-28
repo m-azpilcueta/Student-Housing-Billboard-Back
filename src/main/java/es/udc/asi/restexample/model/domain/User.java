@@ -22,18 +22,18 @@ public class User {
   @Column(unique = true)
   private String login;
 
-  private String password;
-
-  @Enumerated(EnumType.STRING)
-  private UserAuthority authority;
+  private String contrasena;
 
   private String nombre;
 
-  private String email;
-
   private String telefonoContacto;
 
+  private String email;
+
   private boolean active = true;
+
+  @Enumerated(EnumType.STRING)
+  private UserAuthority authority;
 
   public User() {
   }
@@ -54,20 +54,36 @@ public class User {
     this.login = login;
   }
 
-  public String getPassword() {
-    return password;
+  public String getContrasena() {
+    return contrasena;
   }
 
-  public void setPassword(String password) {
-    this.password = password;
+  public void setContrasena(String contrasena) {
+    this.contrasena = contrasena;
   }
 
-  public UserAuthority getAuthority() {
-    return authority;
+  public String getNombre() {
+    return nombre;
   }
 
-  public void setAuthority(UserAuthority authority) {
-    this.authority = authority;
+  public void setNombre(String nombre) {
+    this.nombre = nombre;
+  }
+
+  public String getTelefonoContacto() {
+    return telefonoContacto;
+  }
+
+  public void setTelefonoContacto(String telefonoContacto) {
+    this.telefonoContacto = telefonoContacto;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
   }
 
   public boolean isActive() {
@@ -76,5 +92,13 @@ public class User {
 
   public void setActive(boolean active) {
     this.active = active;
+  }
+
+  public UserAuthority getAuthority() {
+    return authority;
+  }
+
+  public void setAuthority(UserAuthority authority) {
+    this.authority = authority;
   }
 }
