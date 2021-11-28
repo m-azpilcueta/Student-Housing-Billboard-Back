@@ -26,8 +26,10 @@ public class User {
 
   private String nombre;
 
+  @Column(unique = true)
   private String telefonoContacto;
 
+  @Column(unique = true)
   private String email;
 
   private boolean active = true;
