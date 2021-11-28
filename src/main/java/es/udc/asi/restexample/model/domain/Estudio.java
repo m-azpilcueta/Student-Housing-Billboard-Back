@@ -8,7 +8,7 @@ public class Estudio {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "estudio_generator")
   @SequenceGenerator(name = "estudio_generator", sequenceName = "estud_seq")
-  private Long numEstudio;
+  private Long idEstudio;
 
   private String nombre;
 
@@ -16,12 +16,12 @@ public class Estudio {
   @JoinColumn(nullable = false)
   private Universidad idUniv;
 
-  public Long getNumEstudio() {
-    return numEstudio;
+  public Long getIdEstudio() {
+    return idEstudio;
   }
 
-  public void setNumEstudio(Long numEstudio) {
-    this.numEstudio = numEstudio;
+  public void setIdEstudio(Long idEstudio) {
+    this.idEstudio = idEstudio;
   }
 
   public String getNombre() {

@@ -17,7 +17,7 @@ public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_generator")
   @SequenceGenerator(name = "user_generator", sequenceName = "user_seq")
-  private Long id;
+  private Long idUsuario;
 
   @Column(unique = true)
   private String login;
@@ -40,12 +40,12 @@ public class User {
   public User() {
   }
 
-  public Long getId() {
-    return id;
+  public Long getIdUsuario() {
+    return idUsuario;
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  public void setIdUsuario(Long idUsuario) {
+    this.idUsuario = idUsuario;
   }
 
   public String getLogin() {

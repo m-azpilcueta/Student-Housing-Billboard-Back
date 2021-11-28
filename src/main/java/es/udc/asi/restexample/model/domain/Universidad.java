@@ -8,16 +8,16 @@ public class Universidad {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "universidad_generator")
   @SequenceGenerator(name = "universidad_generator", sequenceName = "uni_seq")
-  private Long id;
+  private Long idUniversidad;
 
   private String nombre;
 
-  public Long getId() {
-    return id;
+  public Long getIdUniversidad() {
+    return idUniversidad;
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  public void setIdUniversidad(Long idUniversidad) {
+    this.idUniversidad = idUniversidad;
   }
 
   public String getNombre() {
