@@ -11,7 +11,7 @@ public class UserDTOPublic {
   }
 
   public UserDTOPublic(User user) {
-    this.id = user.getId();
+    this.id = user.getIdUsuario();
     this.login = user.getLogin();
     this.setActive(user.isActive());
   }

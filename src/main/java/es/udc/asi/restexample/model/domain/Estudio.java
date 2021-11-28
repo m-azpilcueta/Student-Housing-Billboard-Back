@@ -13,8 +13,11 @@ public class Estudio {
   private String nombre;
 
   @ManyToOne
-  @JoinColumn(nullable = false)
+  @JoinColumn(name = "id_universidad", nullable = false)
   private Universidad idUniv;
+
+  public Estudio() {
+  }
 
   public Long getIdEstudio() {
     return idEstudio;

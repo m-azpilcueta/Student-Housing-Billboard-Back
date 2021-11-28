@@ -42,4 +42,95 @@ public class User {
 
   @OneToMany(mappedBy = "anunciante")
   private Set<Piso> pisos;
+
+  public User() {
+  }
+
+  public Long getIdUsuario() {
+    return idUsuario;
+  }
+
+  public void setIdUsuario(Long idUsuario) {
+    this.idUsuario = idUsuario;
+  }
+
+  public String getLogin() {
+    return login;
+  }
+
+  public void setLogin(String login) {
+    this.login = login;
+  }
+
+  public String getContrasena() {
+    return contrasena;
+  }
+
+  public void setContrasena(String contrasena) {
+    this.contrasena = contrasena;
+  }
+
+  public String getNombre() {
+    return nombre;
+  }
+
+  public void setNombre(String nombre) {
+    this.nombre = nombre;
+  }
+
+  public String getTelefonoContacto() {
+    return telefonoContacto;
+  }
+
+  public void setTelefonoContacto(String telefonoContacto) {
+    this.telefonoContacto = telefonoContacto;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(boolean active) {
+    this.active = active;
+  }
+
+  public UserAuthority getAuthority() {
+    return authority;
+  }
+
+  public void setAuthority(UserAuthority authority) {
+    this.authority = authority;
+  }
+
+  public Estudio getEstudio() {
+    return estudio;
+  }
+
+  public void setEstudio(Estudio estudio) {
+    this.estudio = estudio;
+  }
+
+  public Set<Piso> getFavoritos() {
+    return favoritos;
+  }
+
+  public void setFavoritos(Set<Piso> favoritos) {
+    this.favoritos = favoritos;
+  }
+
+  public Set<Piso> getPisos() {
+    return pisos;
+  }
+
+  public void setPisos(Set<Piso> pisos) {
+    this.pisos = pisos;
+  }
 }

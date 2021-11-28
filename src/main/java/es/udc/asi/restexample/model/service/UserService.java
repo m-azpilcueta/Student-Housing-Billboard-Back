@@ -66,7 +66,7 @@ public class UserService {
     }
 
     UserDTOPrivate currentUser = getCurrentUserWithAuthority();
-    if (currentUser.getId().equals(user.getId())) {
+    if (currentUser.getId().equals(user.getIdUsuario())) {
       throw new OperationNotAllowed("The user cannot activate/deactive itself");
     }
 

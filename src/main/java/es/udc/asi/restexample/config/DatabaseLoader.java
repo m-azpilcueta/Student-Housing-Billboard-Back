@@ -38,8 +38,6 @@ public class DatabaseLoader {
 
   @Transactional(readOnly = false, rollbackFor = Exception.class)
   public void loadData() throws UserLoginExistsException {
-    userService.registerUser("laura", "laura", true);
-    userService.registerUser("martin", "martin", true);
-    userService.registerUser("alex", "alex");
+    
   }
 }

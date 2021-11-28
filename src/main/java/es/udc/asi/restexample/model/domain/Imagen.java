@@ -16,4 +16,39 @@ public class Imagen {
 
   @Column(unique = true)
   private String path;
+
+  public Imagen() {
+  }
+
+  public Long getImagen() {
+    return imagen;
+  }
+
+  public void setImagen(Long imagen) {
+    this.imagen = imagen;
+  }
+
+  public boolean isPortada() {
+    return portada;
+  }
+
+  public void setPortada(boolean portada) {
+    this.portada = portada;
+  }
+
+  public String getNombre() {
+    return nombre;
+  }
+
+  public void setNombre(String nombre) {
+    this.nombre = nombre;
+  }
+
+  public String getPath() {
+    return path;
+  }
+
+  public void setPath(String path) {
+    this.path = path;
+  }
 }

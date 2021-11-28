@@ -57,4 +57,159 @@ public class Piso {
   @ManyToOne
   @JoinColumn(name = "anunciante", nullable = false)
   private User anunciante;
+
+  public Piso() {
+  }
+
+  public Long getIdPiso() {
+    return idPiso;
+  }
+
+  public void setIdPiso(Long idPiso) {
+    this.idPiso = idPiso;
+  }
+
+  public boolean isAmueblado() {
+    return amueblado;
+  }
+
+  public void setAmueblado(boolean amueblado) {
+    this.amueblado = amueblado;
+  }
+
+  public String getCalle() {
+    return calle;
+  }
+
+  public void setCalle(String calle) {
+    this.calle = calle;
+  }
+
+  public String getNombre() {
+    return nombre;
+  }
+
+  public void setNombre(String nombre) {
+    this.nombre = nombre;
+  }
+
+  public String getCodigoPostal() {
+    return codigoPostal;
+  }
+
+  public void setCodigoPostal(String codigoPostal) {
+    this.codigoPostal = codigoPostal;
+  }
+
+  public LocalDate getFechaPublicacion() {
+    return fechaPublicacion;
+  }
+
+  public void setFechaPublicacion(LocalDate fechaPublicacion) {
+    this.fechaPublicacion = fechaPublicacion;
+  }
+
+  public String getDescripcion() {
+    return descripcion;
+  }
+
+  public void setDescripcion(String descripcion) {
+    this.descripcion = descripcion;
+  }
+
+  public boolean isDisponible() {
+    return disponible;
+  }
+
+  public void setDisponible(boolean disponible) {
+    this.disponible = disponible;
+  }
+
+  public double getImporte() {
+    return importe;
+  }
+
+  public void setImporte(double importe) {
+    this.importe = importe;
+  }
+
+  public String getNumero() {
+    return numero;
+  }
+
+  public void setNumero(String numero) {
+    this.numero = numero;
+  }
+
+  public String getPisoLetra() {
+    return pisoLetra;
+  }
+
+  public void setPisoLetra(String pisoLetra) {
+    this.pisoLetra = pisoLetra;
+  }
+
+  public Localidad getLocalidad() {
+    return localidad;
+  }
+
+  public void setLocalidad(Localidad localidad) {
+    this.localidad = localidad;
+  }
+
+  public Provincia getProvincia() {
+    return provincia;
+  }
+
+  public void setProvincia(Provincia provincia) {
+    this.provincia = provincia;
+  }
+
+  public int getSuperficie() {
+    return superficie;
+  }
+
+  public void setSuperficie(int superficie) {
+    this.superficie = superficie;
+  }
+
+  public int getHabitaciones() {
+    return habitaciones;
+  }
+
+  public void setHabitaciones(int habitaciones) {
+    this.habitaciones = habitaciones;
+  }
+
+  public int getPersonas() {
+    return personas;
+  }
+
+  public void setPersonas(int personas) {
+    this.personas = personas;
+  }
+
+  public Set<Imagen> getImagenes() {
+    return imagenes;
+  }
+
+  public void setImagenes(Set<Imagen> imagenes) {
+    this.imagenes = imagenes;
+  }
+
+  public Set<Mensaje> getMensajes() {
+    return mensajes;
+  }
+
+  public void setMensajes(Set<Mensaje> mensajes) {
+    this.mensajes = mensajes;
+  }
+
+  public User getAnunciante() {
+    return anunciante;
+  }
+
+  public void setAnunciante(User anunciante) {
+    this.anunciante = anunciante;
+  }
 }

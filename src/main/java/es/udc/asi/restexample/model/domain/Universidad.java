@@ -12,6 +12,9 @@ public class Universidad {
 
   private String nombre;
 
+  public Universidad() {
+  }
+
   public Long getIdUniversidad() {
     return idUniversidad;
   }

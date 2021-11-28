@@ -7,11 +7,11 @@ import es.udc.asi.restexample.model.domain.User;
 
 public class UserDTOPrivate {
   private Long id;
-  
+
   @NotEmpty
   @Size(min = 4)
   private String login;
-  
+
   @NotEmpty
   @Size(min = 4)
   private String password;
@@ -21,7 +21,7 @@ public class UserDTOPrivate {
   }
 
   public UserDTOPrivate(User user) {
-    this.id = user.getId();
+    this.id = user.getIdUsuario();
     this.login = user.getLogin();
     // la contraseña no se rellena, nunca se envía al cliente
     this.authority = user.getAuthority().name();
