@@ -12,7 +12,7 @@ public class Estudio {
 
   private String nombre;
 
-  @ManyToOne
+  @ManyToOne (fetch =  FetchType.EAGER)
   @JoinColumn(name = "id_universidad", nullable = false)
   private Universidad idUniv;
 

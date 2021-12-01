@@ -30,17 +30,17 @@ public class User {
   @Enumerated(EnumType.STRING)
   private UserAuthority authority;
 
-  @ManyToOne
+  @ManyToOne (fetch =  FetchType.EAGER)
   @JoinColumn(nullable = false)
   private Estudio estudio;
 
-  @ManyToMany
+  @ManyToMany (fetch =  FetchType.LAZY)
   @JoinTable(name = "theUsuarioFavoritos",
     joinColumns = @JoinColumn(name = "id_usuario", nullable = false),
     inverseJoinColumns = @JoinColumn(name = "id_piso", nullable = false))
   private Set<Piso> favoritos;
 
-  @OneToMany(mappedBy = "anunciante")
+  @OneToMany(mappedBy = "anunciante",fetch =  FetchType.LAZY, cascade= CascadeType.REMOVE)
   private Set<Piso> pisos;
 
   public User() {

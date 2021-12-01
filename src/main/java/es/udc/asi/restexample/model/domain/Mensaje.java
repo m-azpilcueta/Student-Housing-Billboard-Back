@@ -15,11 +15,11 @@ public class Mensaje {
 
   private String texto;
 
-  @ManyToOne
+  @ManyToOne (fetch =  FetchType.LAZY)
   @JoinColumn(name = "usuario", nullable = false)
   private User usuario;
 
-  @OneToOne
+  @OneToOne (cascade = CascadeType.REMOVE)
   @JoinColumn(name = "pregunta")
   private Mensaje pregunta;
 

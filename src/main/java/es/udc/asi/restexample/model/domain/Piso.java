@@ -32,8 +32,10 @@ public class Piso {
 
   private String pisoLetra;
 
+  @Enumerated(EnumType.STRING)
   private Localidad localidad;
 
+  @Enumerated(EnumType.STRING)
   private Provincia provincia;
 
   private int superficie;
@@ -42,19 +44,19 @@ public class Piso {
 
   private int personas;
 
-  @OneToMany
+  @OneToMany (fetch =  FetchType.LAZY )
   @JoinTable(name = "thePisosImagenes",
   joinColumns = @JoinColumn(name = "id_piso", nullable = false),
   inverseJoinColumns = @JoinColumn(name = "id_imagen", nullable = false))
   private Set<Imagen> imagenes;
 
-  @OneToMany
+  @OneToMany (fetch =  FetchType.LAZY )
   @JoinTable(name = "thePisosMensajes",
   joinColumns = @JoinColumn(name = "id_piso", nullable = false),
   inverseJoinColumns = @JoinColumn(name = "id_mensaje", nullable = false))
   private Set<Mensaje> mensajes;
 
-  @ManyToOne
+  @ManyToOne (fetch = FetchType.LAZY)
   @JoinColumn(name = "anunciante", nullable = false)
   private User anunciante;
 
