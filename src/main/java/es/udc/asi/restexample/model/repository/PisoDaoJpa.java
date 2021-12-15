@@ -18,4 +18,9 @@ public class PisoDaoJpa extends GenericDaoJpa implements PisoDao {
     List<Piso> pisos = entityManager.createQuery("from Piso p where p.idPiso=:id AND p.anunciante.active = TRUE", Piso.class).setParameter("id", id).getResultList();
     return pisos.size() != 0 ? pisos.get(0) : null;
   }
+
+  @Override
+  public void create(Piso piso) {
+    entityManager.persist(piso);
+  }
 }
