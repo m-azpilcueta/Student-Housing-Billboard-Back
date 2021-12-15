@@ -23,4 +23,9 @@ public class PisoDaoJpa extends GenericDaoJpa implements PisoDao {
   public void create(Piso piso) {
     entityManager.persist(piso);
   }
+
+  @Override
+  public void update(Piso piso) {
+    entityManager.merge(piso);
+  }
 }
