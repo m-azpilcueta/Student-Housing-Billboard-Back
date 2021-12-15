@@ -28,4 +28,12 @@ public class PisoDaoJpa extends GenericDaoJpa implements PisoDao {
   public void update(Piso piso) {
     entityManager.merge(piso);
   }
+
+  @Override
+  public void deleteById(Long id) {
+    Piso p;
+    if ((p = findById(id)) != null) {
+      entityManager.remove(p);
+    }
+  }
 }
