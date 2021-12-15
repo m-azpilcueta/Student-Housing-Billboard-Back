@@ -1,5 +1,5 @@
 package es.udc.asi.restexample.model.domain;
 
 public enum Localidad {
-  CAMBRE, CULLEREDO, ARTEIXO, OLEIROS
+  CAMBRE, CULLEREDO, ARTEIXO, OLEIROS, DESCONOCIDO
 }

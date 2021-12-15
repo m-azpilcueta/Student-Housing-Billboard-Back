@@ -13,5 +13,5 @@ public interface PisoDao {
 
   void update(Piso piso);
 
-  void deleteById(Long id);
+  void delete(Piso piso);
 }

@@ -30,10 +30,7 @@ public class PisoDaoJpa extends GenericDaoJpa implements PisoDao {
   }
 
   @Override
-  public void deleteById(Long id) {
-    Piso p;
-    if ((p = findById(id)) != null) {
-      entityManager.remove(p);
-    }
+  public void delete(Piso piso) {
+    entityManager.remove(piso);
   }
 }

@@ -1,15 +1,14 @@
-package es.udc.asi.restexample.model.domain;
+package es.udc.asi.restexample.model.service.dto;
 
-import javax.persistence.*;
+import es.udc.asi.restexample.model.domain.Localidad;
+import es.udc.asi.restexample.model.domain.Piso;
+import es.udc.asi.restexample.model.domain.Provincia;
+
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.time.LocalDate;
-import java.util.Set;
 
-@Entity
-@Table(name = "thePiso")
-public class Piso {
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "piso_generator")
-  @SequenceGenerator(name = "piso_generator", sequenceName = "piso_seq")
+public class PisoDTO {
   private Long idPiso;
 
   private boolean amueblado;
@@ -32,11 +31,9 @@ public class Piso {
 
   private String pisoLetra;
 
-  @Enumerated(EnumType.STRING)
-  private Localidad localidad;
+  private String localidad;
 
-  @Enumerated(EnumType.STRING)
-  private Provincia provincia;
+  private String provincia;
 
   private int superficie;
 
@@ -44,39 +41,30 @@ public class Piso {
 
   private int personas;
 
-  @OneToMany (fetch =  FetchType.LAZY )
-  @JoinTable(name = "thePisosImagenes",
-  joinColumns = @JoinColumn(name = "id_piso", nullable = false),
-  inverseJoinColumns = @JoinColumn(name = "id_imagen", nullable = false))
-  private Set<Imagen> imagenes;
+  private UserDTOPublic anunciante;
 
-  @OneToMany (fetch =  FetchType.LAZY )
-  @JoinTable(name = "thePisosMensajes",
-  joinColumns = @JoinColumn(name = "id_piso", nullable = false),
-  inverseJoinColumns = @JoinColumn(name = "id_mensaje", nullable = false))
-  private Set<Mensaje> mensajes;
+  public PisoDTO() {
 
-  @ManyToOne (fetch = FetchType.LAZY)
-  @JoinColumn(name = "anunciante", nullable = false)
-  private User anunciante;
-
-  public Piso() {
   }
 
-  public Piso(boolean amueblado, String calle, String nombre, String codigoPostal, LocalDate fechaPublicacion, String descripcion, boolean disponible, double importe, String numero, String pisoLetra, int superficie, int habitaciones, int personas) {
-    this.amueblado = amueblado;
-    this.calle = calle;
-    this.nombre = nombre;
-    this.codigoPostal = codigoPostal;
-    this.fechaPublicacion = fechaPublicacion;
-    this.descripcion = descripcion;
-    this.disponible = disponible;
-    this.importe = importe;
-    this.numero = numero;
-    this.pisoLetra = pisoLetra;
-    this.superficie = superficie;
-    this.habitaciones = habitaciones;
-    this.personas = personas;
+  public PisoDTO(Piso piso) {
+    this.idPiso = piso.getIdPiso();
+    this.amueblado = piso.isAmueblado();
+    this.calle = piso.getCalle();
+    this.nombre = piso.getNombre();
+    this.codigoPostal = piso.getCodigoPostal();
+    this.fechaPublicacion = piso.getFechaPublicacion();
+    this.descripcion = piso.getDescripcion();
+    this.disponible = piso.isDisponible();
+    this.importe = piso.getImporte();
+    this.numero = piso.getNumero();
+    this.pisoLetra = piso.getPisoLetra();
+    this.localidad = piso.getLocalidad().name();
+    this.provincia = piso.getProvincia().name();
+    this.superficie = piso.getSuperficie();
+    this.habitaciones = piso.getHabitaciones();
+    this.personas = piso.getPersonas();
+    this.anunciante = new UserDTOPublic(piso.getAnunciante());
   }
 
   public Long getIdPiso() {
@@ -167,19 +155,19 @@ public class Piso {
     this.pisoLetra = pisoLetra;
   }
 
-  public Localidad getLocalidad() {
+  public String getLocalidad() {
     return localidad;
   }
 
-  public void setLocalidad(Localidad localidad) {
+  public void setLocalidad(String localidad) {
     this.localidad = localidad;
   }
 
-  public Provincia getProvincia() {
+  public String getProvincia() {
     return provincia;
   }
 
-  public void setProvincia(Provincia provincia) {
+  public void setProvincia(String provincia) {
     this.provincia = provincia;
   }
 
@@ -207,27 +195,11 @@ public class Piso {
     this.personas = personas;
   }
 
-  public Set<Imagen> getImagenes() {
-    return imagenes;
-  }
-
-  public void setImagenes(Set<Imagen> imagenes) {
-    this.imagenes = imagenes;
-  }
-
-  public Set<Mensaje> getMensajes() {
-    return mensajes;
-  }
-
-  public void setMensajes(Set<Mensaje> mensajes) {
-    this.mensajes = mensajes;
-  }
-
-  public User getAnunciante() {
+  public UserDTOPublic getAnunciante() {
     return anunciante;
   }
 
-  public void setAnunciante(User anunciante) {
+  public void setAnunciante(UserDTOPublic anunciante) {
     this.anunciante = anunciante;
   }
 }
