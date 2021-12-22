@@ -31,7 +31,7 @@ public class User {
   private UserAuthority authority;
 
   @ManyToOne (fetch =  FetchType.EAGER)
-  @JoinColumn(nullable = false)
+  @JoinColumn()
   private Estudio estudio;
 
   @ManyToMany (fetch =  FetchType.LAZY)
