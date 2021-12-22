@@ -14,7 +14,7 @@ public class Estudio {
 
   @ManyToOne (fetch =  FetchType.EAGER)
   @JoinColumn(name = "id_universidad", nullable = false)
-  private Universidad idUniv;
+  private Universidad universidad;
 
   public Estudio() {
   }
@@ -35,11 +35,11 @@ public class Estudio {
     this.nombre = nombre;
   }
 
-  public Universidad getIdUniv() {
-    return idUniv;
+  public Universidad getUniversidad() {
+    return universidad;
   }
 
-  public void setIdUniv(Universidad idUniv) {
-    this.idUniv = idUniv;
+  public void setUniversidad(Universidad universidad) {
+    this.universidad = universidad;
   }
 }

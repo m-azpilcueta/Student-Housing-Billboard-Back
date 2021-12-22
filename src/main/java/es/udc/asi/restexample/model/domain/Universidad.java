@@ -1,6 +1,7 @@
 package es.udc.asi.restexample.model.domain;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "theUni")
@@ -11,6 +12,9 @@ public class Universidad {
   private Long idUniversidad;
 
   private String nombre;
+
+  @OneToMany(mappedBy = "universidad")
+  private Set<Estudio> estudios;
 
   public Universidad() {
   }
@@ -29,5 +33,13 @@ public class Universidad {
 
   public void setNombre(String nombre) {
     this.nombre = nombre;
+  }
+
+  public Set<Estudio> getEstudios() {
+    return estudios;
+  }
+
+  public void setEstudios(Set<Estudio> estudios) {
+    this.estudios = estudios;
   }
 }
