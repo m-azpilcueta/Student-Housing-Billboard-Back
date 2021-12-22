@@ -4,9 +4,11 @@ import es.udc.asi.restexample.model.domain.Localidad;
 import es.udc.asi.restexample.model.domain.Piso;
 import es.udc.asi.restexample.model.domain.Provincia;
 import es.udc.asi.restexample.model.exception.NotFoundException;
+import es.udc.asi.restexample.model.exception.OperationNotAllowed;
 import es.udc.asi.restexample.model.repository.PisoDao;
 import es.udc.asi.restexample.model.repository.UserDao;
 import es.udc.asi.restexample.model.service.dto.PisoDTO;
+import es.udc.asi.restexample.model.service.dto.UserDTOPrivate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -17,12 +19,15 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true, rollbackFor = Exception.class)
-public class PostService {
+public class PisoService {
   @Autowired
   private PisoDao pisoDao;
 
   @Autowired
   private UserDao userDao;
+
+  @Autowired
+  private UserService userService;
 
   public List<PisoDTO> findAll() {
     return pisoDao.findAll().stream().map(piso -> new PisoDTO(piso)).collect(Collectors.toList());
@@ -86,9 +91,13 @@ public class PostService {
 
   @PreAuthorize("isAuthenticated()")
   @Transactional(readOnly = false)
-  public void deleteById(Long id) throws NotFoundException {
+  public void deleteById(Long id) throws NotFoundException, OperationNotAllowed {
     Piso p = pisoDao.findById(id);
     if (p == null) throw new NotFoundException(id.toString(), Piso.class);
+    UserDTOPrivate currenUser = userService.getCurrentUserWithAuthority();
+    if (!currenUser.getId().equals(p.getAnunciante().getIdUsuario())) {
+      throw new OperationNotAllowed("Current user does not match piso creator");
+    }
     pisoDao.delete(p);
   }
 }
