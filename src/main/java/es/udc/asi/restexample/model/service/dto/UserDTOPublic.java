@@ -14,9 +14,8 @@ public class UserDTOPublic {
   private String telefonoContacto;
   private String email;
   private boolean active = true;
- /* @NotNull
-  private EstudioDTO estudio;
-  private List<PisoDTO> pisos = new ArrayList<>();
+
+ /* private List<PisoDTO> pisos = new ArrayList<>();
   private List<PisoDTO> favoritos = new ArrayList<>();
 */
   public UserDTOPublic() {
@@ -29,9 +28,8 @@ public class UserDTOPublic {
     this.telefonoContacto = user.getTelefonoContacto();
     this.email = user.getEmail();
     this.setActive(user.isActive());
-    /*
-    this.estudio = new EstudioDTO(user.getEstudio());
-    user.getPisos().forEach(p -> {
+
+    /*user.getPisos().forEach(p -> {
       this.pisos.add(new PisoDTO(p));
     });
     this.pisos.sort(Comparator.comparing(PisoDTO::getName));
@@ -90,14 +88,8 @@ public class UserDTOPublic {
   public void setActive(boolean active) {
     this.active = active;
   }
-/*
-  public EstudioDTO getEstudio() {
-    return estudio;
-  }
 
-  public void setEstudio(EstudioDTO estudio) {
-    this.estudio = estudio;
-  }
+  /*
 
   public List<PisoDTO> getPisos() {
     return pisos;

@@ -76,6 +76,6 @@ public class AccountResource {
       throw new RequestBodyNotValidException(errors);
     }
 
-    userService.registerUser(account.getLogin(), account.getPassword());
+    userService.registerUser(account);
   }
 }
