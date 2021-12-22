@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
-@RequestMapping("/api/posts")
+@RequestMapping("/api/pisos")
 public class PisoResource {
   @Autowired
   PisoService pisoService;
