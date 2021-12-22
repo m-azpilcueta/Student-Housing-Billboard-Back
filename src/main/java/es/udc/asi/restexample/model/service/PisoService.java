@@ -39,29 +39,33 @@ public class PisoService {
     return new PisoDTO(p);
   }
 
-  @PreAuthorize("isAuthenticated()")
-  @Transactional(readOnly = false)
-  public PisoDTO create(PisoDTO piso) throws IllegalArgumentException {
-    Piso p = new Piso(piso.isAmueblado(), piso.getCalle(), piso.getNombre(), piso.getCodigoPostal(), piso.getFechaPublicacion(), piso.getDescripcion(), piso.isDisponible(),
-      piso.getImporte(), piso.getNumero(), piso.getPisoLetra(), piso.getSuperficie(), piso.getHabitaciones(), piso.getPersonas());
+  private void setEnums(Piso p, PisoDTO piso) throws IllegalArgumentException {
     try {
-      p.setLocalidad(Localidad.valueOf(piso.getLocalidad()));
+      p.setLocalidad(Localidad.valueOf(piso.getLocalidad().toUpperCase()));
     } catch (IllegalArgumentException e) {
       p.setLocalidad(Localidad.DESCONOCIDO);
     }
     try {
-      p.setProvincia(Provincia.valueOf(piso.getProvincia()));
+      p.setProvincia(Provincia.valueOf(piso.getProvincia().toUpperCase()));
     } catch (IllegalArgumentException e) {
       p.setProvincia(Provincia.DESCONOCIDO);
     }
-    p.setAnunciante(userDao.findById(piso.getAnunciante().getId()));
+  }
+
+  @PreAuthorize("hasAuthority('USER')")
+  @Transactional(readOnly = false)
+  public PisoDTO create(PisoDTO piso) throws IllegalArgumentException {
+    Piso p = new Piso(piso.isAmueblado(), piso.getCalle(), piso.getNombre(), piso.getCodigoPostal(), piso.getDescripcion(), piso.isDisponible(),
+      piso.getImporte(), piso.getNumero(), piso.getPisoLetra(), piso.getSuperficie(), piso.getHabitaciones(), piso.getPersonas());
+    setEnums(p, piso);
+    p.setAnunciante(userDao.findById(userService.getCurrentUserWithAuthority().getId()));
     pisoDao.create(p);
     return new PisoDTO(p);
   }
 
   @PreAuthorize("isAuthenticated()")
   @Transactional(readOnly = false)
-  public PisoDTO update(PisoDTO piso) throws IllegalArgumentException {
+  public PisoDTO update(PisoDTO piso) throws IllegalArgumentException, OperationNotAllowed {
     Piso p = pisoDao.findById(piso.getIdPiso());
     p.setAmueblado(piso.isAmueblado());
     p.setCalle(piso.getCalle());
@@ -75,15 +79,10 @@ public class PisoService {
     p.setSuperficie(piso.getSuperficie());
     p.setHabitaciones(piso.getHabitaciones());
     p.setPersonas(piso.getPersonas());
-    try {
-      p.setLocalidad(Localidad.valueOf(piso.getLocalidad()));
-    } catch (IllegalArgumentException e) {
-      p.setLocalidad(Localidad.DESCONOCIDO);
-    }
-    try {
-      p.setProvincia(Provincia.valueOf(piso.getProvincia()));
-    } catch (IllegalArgumentException e) {
-      p.setProvincia(Provincia.DESCONOCIDO);
+    setEnums(p, piso);
+    UserDTOPrivate currentUser = userService.getCurrentUserWithAuthority();
+    if (!currentUser.getId().equals(p.getAnunciante().getIdUsuario())) {
+      throw new OperationNotAllowed("Current user does not match piso creator");
     }
     pisoDao.update(p);
     return new PisoDTO(p);
@@ -94,8 +93,8 @@ public class PisoService {
   public void deleteById(Long id) throws NotFoundException, OperationNotAllowed {
     Piso p = pisoDao.findById(id);
     if (p == null) throw new NotFoundException(id.toString(), Piso.class);
-    UserDTOPrivate currenUser = userService.getCurrentUserWithAuthority();
-    if (!currenUser.getId().equals(p.getAnunciante().getIdUsuario())) {
+    UserDTOPrivate currentUser = userService.getCurrentUserWithAuthority();
+    if (!currentUser.getId().equals(p.getAnunciante().getIdUsuario())) {
       throw new OperationNotAllowed("Current user does not match piso creator");
     }
     pisoDao.delete(p);

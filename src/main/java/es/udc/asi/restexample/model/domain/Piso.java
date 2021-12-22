@@ -63,12 +63,12 @@ public class Piso {
   public Piso() {
   }
 
-  public Piso(boolean amueblado, String calle, String nombre, String codigoPostal, LocalDate fechaPublicacion, String descripcion, boolean disponible, double importe, String numero, String pisoLetra, int superficie, int habitaciones, int personas) {
+  public Piso(boolean amueblado, String calle, String nombre, String codigoPostal, String descripcion, boolean disponible, double importe, String numero, String pisoLetra, int superficie, int habitaciones, int personas) {
     this.amueblado = amueblado;
     this.calle = calle;
     this.nombre = nombre;
     this.codigoPostal = codigoPostal;
-    this.fechaPublicacion = fechaPublicacion;
+    this.fechaPublicacion = LocalDate.now();
     this.descripcion = descripcion;
     this.disponible = disponible;
     this.importe = importe;
