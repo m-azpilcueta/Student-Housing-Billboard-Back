@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/pisos")
@@ -39,12 +40,18 @@ public class PisoResource {
   }
 
   @PutMapping("/{id}")
-  public PisoDTO update(@PathVariable Long id, @RequestBody @Valid PisoDTO piso, Errors errors) throws RequestBodyNotValidException, IdAndBodyNotMatchingOnUpdateException {
+  public PisoDTO update(@PathVariable Long id, @RequestBody @Valid PisoDTO piso, Errors errors) throws RequestBodyNotValidException,
+    IdAndBodyNotMatchingOnUpdateException, OperationNotAllowed, NotFoundException {
     if (errors.hasErrors()) {
       throw new RequestBodyNotValidException(errors);
     }
     if (id != piso.getIdPiso()) {
       throw new IdAndBodyNotMatchingOnUpdateException(Piso.class);
+    }
+    try {
+      pisoService.findById(piso.getIdPiso());
+    } catch (NotFoundException e) {
+      throw new NotFoundException(id.toString(), Piso.class);
     }
     return pisoService.update(piso);
   }
