@@ -46,6 +46,16 @@ public class ImageServiceFilesystem implements ImageService {
   }
 
   @Override
+  public void deleteImage(String filename) throws ModelException {
+    try {
+      Files.delete(getRootLoc().resolve(filename + getExtension(filename)));
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new ModelException("Problema procesando el fichero");
+    }
+  }
+
+  @Override
   public ImagenDTO getImage(String imagePath) throws ModelException {
     try {
       InputStream is = new FileInputStream(properties.getImagesPath() + imagePath + getExtension(imagePath));

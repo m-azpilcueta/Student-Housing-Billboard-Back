@@ -117,6 +117,28 @@ public class PisoService {
 
   @PreAuthorize("isAuthenticated()")
   @Transactional(readOnly = false)
+  public void borrarImagen(Long idPiso, Long idImagen) throws ModelException {
+    Imagen i, borraIm;
+    Piso p = pisoDao.findById(idPiso);
+    if (p == null) throw new NotFoundException(idPiso.toString(), Piso.class);
+    if ((i = imagenDao.find(idImagen)) == null) throw new NotFoundException(idImagen.toString(), Imagen.class);
+    UserDTOPrivate currentUser = userService.getCurrentUserWithAuthority();
+    if (!currentUser.getId().equals(p.getAnunciante().getIdUsuario())) {
+      throw new OperationNotAllowed("Current user does not match piso creator");
+    }
+    imageService.deleteImage(i.getPath());
+    for (Imagen im : p.getImagenes()) {
+      if (idImagen == im.getIdImagen()) {
+        borraIm = im;
+        p.getImagenes().remove(borraIm);
+        break;
+      }
+    }
+    imagenDao.delete(i);
+  }
+
+  @PreAuthorize("isAuthenticated()")
+  @Transactional(readOnly = false)
   public PisoDTO update(PisoDTO piso) throws IllegalArgumentException, OperationNotAllowed {
     Piso p = pisoDao.findById(piso.getIdPiso());
     p.setAmueblado(piso.isAmueblado());

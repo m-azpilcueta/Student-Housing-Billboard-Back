@@ -99,6 +99,16 @@ public class PisoResource {
     return pisoService.actualizarImagen(imagen.getIdImagen(), imagen.isPortada());
   }
 
+  @DeleteMapping("/{id}/imagenes/{idImagen}")
+  public void borrarImagen(@PathVariable Long id, @PathVariable Long idImagen) throws ModelException {
+    try {
+      pisoService.findById(id);
+    } catch (NotFoundException e) {
+      throw new NotFoundException(id.toString(), Piso.class);
+    }
+    pisoService.borrarImagen(id, idImagen);
+  }
+
   @PutMapping("/{id}")
   public PisoDTO update(@PathVariable Long id, @RequestBody @Valid PisoDTO piso, Errors errors) throws RequestBodyNotValidException,
     IdAndBodyNotMatchingOnUpdateException, OperationNotAllowed, NotFoundException {
@@ -116,7 +126,7 @@ public class PisoResource {
     return pisoService.update(piso);
   }
 
-  @DeleteMapping("{id}")
+  @DeleteMapping("/{id}")
   public void delete(@PathVariable Long id) throws NotFoundException, OperationNotAllowed {
     pisoService.deleteById(id);
   }

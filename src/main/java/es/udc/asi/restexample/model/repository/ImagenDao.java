@@ -6,4 +6,5 @@ public interface ImagenDao {
   void create(Imagen imagen);
   Imagen find(Long id);
   void update(Imagen imagen);
+  void delete(Imagen imagen);
 }

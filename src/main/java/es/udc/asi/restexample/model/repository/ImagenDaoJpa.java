@@ -20,4 +20,9 @@ public class ImagenDaoJpa extends GenericDaoJpa implements ImagenDao {
   public void update(Imagen imagen) {
     entityManager.merge(imagen);
   }
+
+  @Override
+  public void delete(Imagen imagen) {
+    entityManager.remove(imagen);
+  }
 }
