@@ -8,16 +8,18 @@ public class ImagenDTO {
   private String nombre;
   private String path;
   private String mediaType;
+  private boolean portada;
 
   public ImagenDTO(InputStream inputStream, String path) {
     this.inputStream = inputStream;
     this.path = path;
   }
 
-  public ImagenDTO(Long idImagen, String nombre, String path) {
+  public ImagenDTO(Long idImagen, String nombre, String path, boolean portada) {
     this.idImagen = idImagen;
     this.nombre = nombre;
     this.path = path;
+    this.portada = portada;
   }
 
   public ImagenDTO(InputStream inputStream, String path, String mediaType) {
@@ -48,5 +50,13 @@ public class ImagenDTO {
 
   public void setMediaType(String mediaType) {
     this.mediaType = mediaType;
+  }
+
+  public boolean isPortada() {
+    return portada;
+  }
+
+  public void setPortada(boolean portada) {
+    this.portada = portada;
   }
 }

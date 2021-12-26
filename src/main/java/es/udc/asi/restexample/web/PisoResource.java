@@ -6,6 +6,7 @@ import es.udc.asi.restexample.model.exception.ModelException;
 import es.udc.asi.restexample.model.exception.NotFoundException;
 import es.udc.asi.restexample.model.exception.OperationNotAllowed;
 import es.udc.asi.restexample.model.service.PisoService;
+import es.udc.asi.restexample.model.service.dto.ActualizarImagenDTO;
 import es.udc.asi.restexample.model.service.dto.ImagenDTO;
 import es.udc.asi.restexample.model.service.dto.PisoDTO;
 import es.udc.asi.restexample.web.exceptions.IdAndBodyNotMatchingOnUpdateException;
@@ -20,9 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 @RestController
@@ -84,6 +83,20 @@ public class PisoResource {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  @PutMapping("/{id}/imagenes/{idImagen}")
+  public ImagenDTO actualizarPortada(@PathVariable Long id, @PathVariable Long idImagen, @RequestBody @Valid ActualizarImagenDTO imagen, Errors errors) throws IdAndBodyNotMatchingOnUpdateException, RequestBodyNotValidException {
+    if (errors.hasErrors()) {
+      throw new RequestBodyNotValidException(errors);
+    }
+    if (id != imagen.getIdPiso()) {
+      throw new IdAndBodyNotMatchingOnUpdateException(Piso.class);
+    }
+    if (idImagen != imagen.getIdImagen()) {
+      throw new IdAndBodyNotMatchingOnUpdateException(Imagen.class);
+    }
+    return pisoService.actualizarImagen(imagen.getIdImagen(), imagen.isPortada());
   }
 
   @PutMapping("/{id}")

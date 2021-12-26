@@ -10,4 +10,14 @@ public class ImagenDaoJpa extends GenericDaoJpa implements ImagenDao {
   public void create(Imagen imagen) {
     entityManager.persist(imagen);
   }
+
+  @Override
+  public Imagen find(Long id) {
+    return entityManager.find(Imagen.class, id);
+  }
+
+  @Override
+  public void update(Imagen imagen) {
+    entityManager.merge(imagen);
+  }
 }

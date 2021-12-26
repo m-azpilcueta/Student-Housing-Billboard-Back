@@ -108,6 +108,15 @@ public class PisoService {
 
   @PreAuthorize("isAuthenticated()")
   @Transactional(readOnly = false)
+  public ImagenDTO actualizarImagen(Long idImagen, boolean portada) {
+    Imagen i = imagenDao.find(idImagen);
+    i.setPortada(portada);
+    imagenDao.update(i);
+    return new ImagenDTO(i.getIdImagen(), i.getNombre(), i.getPath(), i.isPortada());
+  }
+
+  @PreAuthorize("isAuthenticated()")
+  @Transactional(readOnly = false)
   public PisoDTO update(PisoDTO piso) throws IllegalArgumentException, OperationNotAllowed {
     Piso p = pisoDao.findById(piso.getIdPiso());
     p.setAmueblado(piso.isAmueblado());

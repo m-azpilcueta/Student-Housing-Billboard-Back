@@ -70,7 +70,7 @@ public class PisoDTO {
     this.personas = piso.getPersonas();
     this.anunciante = new UserDTOPublic(piso.getAnunciante());
     if (piso.getImagenes() != null) {
-      piso.getImagenes().forEach(i -> this.imagenes.add(new ImagenDTO(i.getIdImagen(), i.getNombre(), i.getPath())));
+      piso.getImagenes().forEach(i -> this.imagenes.add(new ImagenDTO(i.getIdImagen(), i.getNombre(), i.getPath(), i.isPortada())));
     }
   }
 
