@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import es.udc.asi.restexample.config.Properties;
 import es.udc.asi.restexample.model.exception.ModelException;
-import es.udc.asi.restexample.model.service.dto.ImageDTO;
+import es.udc.asi.restexample.model.service.dto.ImagenDTO;
 
 @Service
 public class ImageServiceFilesystem implements ImageService {
@@ -29,14 +29,14 @@ public class ImageServiceFilesystem implements ImageService {
   private Path rootLoc;
 
   @Override
-  public String saveImage(MultipartFile file, Long id) throws ModelException {
+  public String saveImage(MultipartFile file) throws ModelException {
     if (file.isEmpty()) {
       throw new ModelException("No se ha enviado ningún fichero");
     }
     String filename = StringUtils.cleanPath(file.getOriginalFilename());
 
     try (InputStream inputStream = file.getInputStream()) {
-      Files.copy(inputStream, getRootLoc().resolve(id + getExtension(filename)), StandardCopyOption.REPLACE_EXISTING);
+      Files.copy(inputStream, getRootLoc().resolve(filename + getExtension(filename)), StandardCopyOption.REPLACE_EXISTING);
     } catch (IOException e) {
       e.printStackTrace();
       throw new ModelException("Problema procesando el fichero");
@@ -46,7 +46,7 @@ public class ImageServiceFilesystem implements ImageService {
   }
 
   @Override
-  public ImageDTO getImage(String imagePath, Long id) throws ModelException {
+  public ImagenDTO getImage(String imagePath, Long id) throws ModelException {
     try {
       InputStream is = new FileInputStream(properties.getImagesPath() + id + getExtension(imagePath));
       byte[] buffer = new byte[1024];
@@ -58,7 +58,7 @@ public class ImageServiceFilesystem implements ImageService {
       InputStream imageIs = new ByteArrayInputStream(os.toByteArray());
       os.flush();
       is.close();
-      return new ImageDTO(imageIs, getImageMediaType(imagePath), imagePath);
+      return new ImagenDTO(imageIs, getImageMediaType(imagePath), imagePath);
     } catch (IOException e) {
       e.printStackTrace();
       throw new ModelException("Problem while getting the image");

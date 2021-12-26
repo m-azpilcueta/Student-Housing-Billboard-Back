@@ -32,6 +32,3 @@ build/
 ### VS Code ###
 .vscode/
 
-
-### Para evitar problemas con las rutas de imágenes, quitar cuando se quiera hacer cambios en el archivo ###
-!**/src/main/resources/application.yml

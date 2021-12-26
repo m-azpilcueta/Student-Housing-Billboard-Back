@@ -1,20 +1,27 @@
 package es.udc.asi.restexample.model.service;
 
+import es.udc.asi.restexample.model.domain.Imagen;
 import es.udc.asi.restexample.model.domain.Localidad;
 import es.udc.asi.restexample.model.domain.Piso;
 import es.udc.asi.restexample.model.domain.Provincia;
+import es.udc.asi.restexample.model.exception.ModelException;
 import es.udc.asi.restexample.model.exception.NotFoundException;
 import es.udc.asi.restexample.model.exception.OperationNotAllowed;
+import es.udc.asi.restexample.model.repository.ImagenDao;
 import es.udc.asi.restexample.model.repository.PisoDao;
 import es.udc.asi.restexample.model.repository.UserDao;
 import es.udc.asi.restexample.model.service.dto.PisoDTO;
 import es.udc.asi.restexample.model.service.dto.UserDTOPrivate;
+import es.udc.asi.restexample.model.service.util.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +34,13 @@ public class PisoService {
   private UserDao userDao;
 
   @Autowired
+  private ImagenDao imagenDao;
+
+  @Autowired
   private UserService userService;
+
+  @Autowired
+  private ImageService imageService;
 
   public List<PisoDTO> findAll() {
     return pisoDao.findAll().stream().map(piso -> new PisoDTO(piso)).collect(Collectors.toList());
@@ -61,6 +74,31 @@ public class PisoService {
     p.setAnunciante(userDao.findById(userService.getCurrentUserWithAuthority().getId()));
     pisoDao.create(p);
     return new PisoDTO(p);
+  }
+
+  @PreAuthorize("isAuthenticated()")
+  @Transactional(readOnly = false)
+  public void guardarImagenes(Long id, Set<MultipartFile> imagenes) throws OperationNotAllowed {
+    Piso p = pisoDao.findById(id);
+    UserDTOPrivate currentUser = userService.getCurrentUserWithAuthority();
+    if (!currentUser.getId().equals(p.getAnunciante().getIdUsuario())) {
+      throw new OperationNotAllowed("Current user does not match piso creator");
+    }
+    Set<Imagen> imagenesdb = new HashSet<>();
+    imagenes.forEach(imagen -> {
+      String nombre;
+      try {
+        nombre = imageService.saveImage(imagen);
+      } catch (ModelException e) {
+        e.printStackTrace();
+        return;
+      }
+      Imagen i = new Imagen(nombre, imagen.getOriginalFilename());
+      imagenDao.create(i);
+      imagenesdb.add(i);
+    });
+    p.setImagenes(imagenesdb);
+    pisoDao.update(p);
   }
 
   @PreAuthorize("isAuthenticated()")

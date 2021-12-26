@@ -14,10 +14,14 @@ public class Imagen {
 
   private String nombre;
 
-  @Column(unique = true)
   private String path;
 
   public Imagen() {
+  }
+
+  public Imagen(String nombre, String path) {
+    this.nombre = nombre;
+    this.path = path;
   }
 
   public Long getImagen() {

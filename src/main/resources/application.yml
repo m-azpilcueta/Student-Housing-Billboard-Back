@@ -27,5 +27,5 @@ properties:
   clientHost: http://localhost:1234
   jwtSecretKey: sdfgsdgsdfgsdfgdsfgdfgsdfgsdgsdf
   jwtValidity: 7200
-  imagesPath: /tmp/images/
+  imagesPath: C:\Users\Public\pisos_asi
 #  imagesPath: C:\\Users\\Public\\Pictures\\asi\\
