@@ -10,6 +10,7 @@ import es.udc.asi.restexample.model.exception.OperationNotAllowed;
 import es.udc.asi.restexample.model.repository.ImagenDao;
 import es.udc.asi.restexample.model.repository.PisoDao;
 import es.udc.asi.restexample.model.repository.UserDao;
+import es.udc.asi.restexample.model.service.dto.ImagenDTO;
 import es.udc.asi.restexample.model.service.dto.PisoDTO;
 import es.udc.asi.restexample.model.service.dto.UserDTOPrivate;
 import es.udc.asi.restexample.model.service.util.ImageService;
@@ -86,19 +87,23 @@ public class PisoService {
     }
     Set<Imagen> imagenesdb = new HashSet<>();
     imagenes.forEach(imagen -> {
-      String nombre;
+      String path;
       try {
-        nombre = imageService.saveImage(imagen);
+        path = imageService.saveImage(imagen);
       } catch (ModelException e) {
         e.printStackTrace();
         return;
       }
-      Imagen i = new Imagen(nombre, imagen.getOriginalFilename());
+      Imagen i = new Imagen(imagen.getOriginalFilename(), path);
       imagenDao.create(i);
       imagenesdb.add(i);
     });
     p.setImagenes(imagenesdb);
     pisoDao.update(p);
+  }
+
+  public ImagenDTO cargarImagen(String path) throws ModelException {
+    return imageService.getImage(path);
   }
 
   @PreAuthorize("isAuthenticated()")

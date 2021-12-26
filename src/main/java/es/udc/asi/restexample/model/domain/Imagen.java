@@ -8,7 +8,7 @@ public class Imagen {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "imagen_generator")
   @SequenceGenerator(name = "imagen_generator", sequenceName = "imagen_seq")
-  private Long imagen;
+  private Long idImagen;
 
   private boolean portada;
 
@@ -24,12 +24,12 @@ public class Imagen {
     this.path = path;
   }
 
-  public Long getImagen() {
-    return imagen;
+  public Long getIdImagen() {
+    return idImagen;
   }
 
-  public void setImagen(Long imagen) {
-    this.imagen = imagen;
+  public void setIdImagen(Long imagen) {
+    this.idImagen = imagen;
   }
 
   public boolean isPortada() {

@@ -46,9 +46,9 @@ public class ImageServiceFilesystem implements ImageService {
   }
 
   @Override
-  public ImagenDTO getImage(String imagePath, Long id) throws ModelException {
+  public ImagenDTO getImage(String imagePath) throws ModelException {
     try {
-      InputStream is = new FileInputStream(properties.getImagesPath() + id + getExtension(imagePath));
+      InputStream is = new FileInputStream(properties.getImagesPath() + imagePath + getExtension(imagePath));
       byte[] buffer = new byte[1024];
       ByteArrayOutputStream os = new ByteArrayOutputStream();
       int len;
@@ -58,7 +58,7 @@ public class ImageServiceFilesystem implements ImageService {
       InputStream imageIs = new ByteArrayInputStream(os.toByteArray());
       os.flush();
       is.close();
-      return new ImagenDTO(imageIs, getImageMediaType(imagePath), imagePath);
+      return new ImagenDTO(imageIs, imagePath, getImageMediaType(imagePath));
     } catch (IOException e) {
       e.printStackTrace();
       throw new ModelException("Problem while getting the image");

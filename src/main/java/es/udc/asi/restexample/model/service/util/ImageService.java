@@ -9,5 +9,5 @@ public interface ImageService {
 
   String saveImage(MultipartFile file) throws ModelException;
 
-  ImagenDTO getImage(String imagePath, Long id) throws ModelException;
+  ImagenDTO getImage(String imagePath) throws ModelException;
 }

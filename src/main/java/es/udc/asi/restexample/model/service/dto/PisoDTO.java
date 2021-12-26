@@ -7,6 +7,8 @@ import es.udc.asi.restexample.model.domain.Provincia;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PisoDTO {
   private Long idPiso;
@@ -43,6 +45,8 @@ public class PisoDTO {
 
   private UserDTOPublic anunciante;
 
+  private Set<ImagenDTO> imagenes = new HashSet<>();
+
   public PisoDTO() {
 
   }
@@ -65,6 +69,9 @@ public class PisoDTO {
     this.habitaciones = piso.getHabitaciones();
     this.personas = piso.getPersonas();
     this.anunciante = new UserDTOPublic(piso.getAnunciante());
+    if (piso.getImagenes() != null) {
+      piso.getImagenes().forEach(i -> this.imagenes.add(new ImagenDTO(i.getIdImagen(), i.getNombre(), i.getPath())));
+    }
   }
 
   public Long getIdPiso() {
@@ -201,5 +208,13 @@ public class PisoDTO {
 
   public void setAnunciante(UserDTOPublic anunciante) {
     this.anunciante = anunciante;
+  }
+
+  public Set<ImagenDTO> getImagenes() {
+    return imagenes;
+  }
+
+  public void setImagenes(Set<ImagenDTO> imagenes) {
+    this.imagenes = imagenes;
   }
 }

@@ -1,13 +1,16 @@
 package es.udc.asi.restexample.web;
 
+import es.udc.asi.restexample.model.domain.Imagen;
 import es.udc.asi.restexample.model.domain.Piso;
 import es.udc.asi.restexample.model.exception.ModelException;
 import es.udc.asi.restexample.model.exception.NotFoundException;
 import es.udc.asi.restexample.model.exception.OperationNotAllowed;
 import es.udc.asi.restexample.model.service.PisoService;
+import es.udc.asi.restexample.model.service.dto.ImagenDTO;
 import es.udc.asi.restexample.model.service.dto.PisoDTO;
 import es.udc.asi.restexample.web.exceptions.IdAndBodyNotMatchingOnUpdateException;
 import es.udc.asi.restexample.web.exceptions.RequestBodyNotValidException;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.Errors;
@@ -16,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -44,15 +49,41 @@ public class PisoResource {
     return pisoService.create(piso);
   }
 
-  @PostMapping("/{id}/images")
+  @PostMapping("/{id}/imagenes")
   @ResponseStatus(HttpStatus.OK)
-  public void guardarImagenes(@PathVariable Long id, @RequestParam Set<MultipartFile> imagenes, HttpServletResponse response) throws NotFoundException, OperationNotAllowed {
+  public void guardarImagenes(@PathVariable Long id, @RequestParam Set<MultipartFile> imagenes) throws NotFoundException, OperationNotAllowed {
     try {
       pisoService.findById(id);
     } catch (NotFoundException e) {
       throw new NotFoundException(id.toString(), Piso.class);
     }
     pisoService.guardarImagenes(id, imagenes);
+  }
+
+  @GetMapping("/{id}/imagenes/{idImagen}")
+  @ResponseStatus(HttpStatus.OK)
+  public void cargarImagen(@PathVariable Long id, @PathVariable Long idImagen, HttpServletResponse response) throws ModelException {
+    PisoDTO p;
+    String path = "";
+    try {
+      p = pisoService.findById(id);
+    } catch (NotFoundException e) {
+      throw new NotFoundException(id.toString(), Piso.class);
+    }
+    for (ImagenDTO i:p.getImagenes()) {
+      if (idImagen == i.getIdImagen()) {
+         path = i.getPath();
+         break;
+      }
+    }
+    ImagenDTO imagenDTO = pisoService.cargarImagen(path);
+    try {
+      response.setContentType(imagenDTO.getMediaType());
+      response.setHeader("Content-disposition", "filename=" + imagenDTO.getPath());
+      IOUtils.copy(imagenDTO.getInputStream(), response.getOutputStream());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   @PutMapping("/{id}")
