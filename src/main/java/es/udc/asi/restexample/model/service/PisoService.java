@@ -8,10 +8,7 @@ import es.udc.asi.restexample.model.repository.ImagenDao;
 import es.udc.asi.restexample.model.repository.MensajeDao;
 import es.udc.asi.restexample.model.repository.PisoDao;
 import es.udc.asi.restexample.model.repository.UserDao;
-import es.udc.asi.restexample.model.service.dto.ImagenDTO;
-import es.udc.asi.restexample.model.service.dto.PisoDTO;
-import es.udc.asi.restexample.model.service.dto.PreguntaDTO;
-import es.udc.asi.restexample.model.service.dto.UserDTOPrivate;
+import es.udc.asi.restexample.model.service.dto.*;
 import es.udc.asi.restexample.model.service.util.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -81,13 +78,35 @@ public class PisoService {
 
   @PreAuthorize("hasAuthority('USER')")
   @Transactional(readOnly = false)
-  public PisoDTO preguntar(Long id, PreguntaDTO pregunta) {
+  public PisoDTO preguntar(Long id, TextoMensajesDTO pregunta) {
     Piso p = pisoDao.findById(id);
     Mensaje m = new Mensaje(pregunta);
     m.setUsuario(userDao.findById(userService.getCurrentUserWithAuthority().getId()));
     m.setPregunta(null);
     m.setRespuesta(null);
     mensajeDao.create(m);
+    p.getMensajes().add(m);
+    pisoDao.update(p);
+    return new PisoDTO(p);
+  }
+
+  @PreAuthorize("hasAuthority('USER')")
+  @Transactional(readOnly = false)
+  public PisoDTO responder(Long idPiso, Long idPregunta, TextoMensajesDTO respuesta) throws NotFoundException, OperationNotAllowed {
+    Piso p = pisoDao.findById(idPiso);
+    if (mensajeDao.find(idPregunta) == null) throw new NotFoundException(idPregunta.toString(), Mensaje.class);
+    UserDTOPrivate currentUser = userService.getCurrentUserWithAuthority();
+    if (!currentUser.getId().equals(p.getAnunciante().getIdUsuario())) {
+      throw new OperationNotAllowed("Current user does not match piso creator");
+    }
+    Mensaje m = new Mensaje(respuesta);
+    m.setUsuario(userDao.findById(userService.getCurrentUserWithAuthority().getId()));
+    m.setPregunta(mensajeDao.find(idPregunta));
+    m.setRespuesta(null);
+    mensajeDao.create(m);
+    Mensaje preg = mensajeDao.find(idPregunta);
+    preg.setRespuesta(m);
+    mensajeDao.update(preg);
     p.getMensajes().add(m);
     pisoDao.update(p);
     return new PisoDTO(p);

@@ -1,6 +1,6 @@
 package es.udc.asi.restexample.model.domain;
 
-import es.udc.asi.restexample.model.service.dto.PreguntaDTO;
+import es.udc.asi.restexample.model.service.dto.TextoMensajesDTO;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -31,9 +31,9 @@ public class Mensaje {
   public Mensaje() {
   }
 
-  public Mensaje(PreguntaDTO pregunta) {
+  public Mensaje(TextoMensajesDTO texto) {
     this.fecha = LocalDateTime.now();
-    this.texto = pregunta.getTexto();
+    this.texto = texto.getTexto();
   }
 
   public Long getIdMensaje() {

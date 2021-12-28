@@ -10,4 +10,14 @@ public class MensajeDaoJpa extends GenericDaoJpa implements MensajeDao {
   public void create(Mensaje mensaje) {
     entityManager.persist(mensaje);
   }
+
+  @Override
+  public Mensaje find(Long id) {
+   return entityManager.find(Mensaje.class, id);
+  }
+
+  @Override
+  public void update(Mensaje mensaje) {
+    entityManager.merge(mensaje);
+  }
 }

@@ -1,15 +1,13 @@
 package es.udc.asi.restexample.web;
 
 import es.udc.asi.restexample.model.domain.Imagen;
+import es.udc.asi.restexample.model.domain.Mensaje;
 import es.udc.asi.restexample.model.domain.Piso;
 import es.udc.asi.restexample.model.exception.ModelException;
 import es.udc.asi.restexample.model.exception.NotFoundException;
 import es.udc.asi.restexample.model.exception.OperationNotAllowed;
 import es.udc.asi.restexample.model.service.PisoService;
-import es.udc.asi.restexample.model.service.dto.ActualizarImagenDTO;
-import es.udc.asi.restexample.model.service.dto.ImagenDTO;
-import es.udc.asi.restexample.model.service.dto.PisoDTO;
-import es.udc.asi.restexample.model.service.dto.PreguntaDTO;
+import es.udc.asi.restexample.model.service.dto.*;
 import es.udc.asi.restexample.web.exceptions.IdAndBodyNotMatchingOnUpdateException;
 import es.udc.asi.restexample.web.exceptions.RequestBodyNotValidException;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -50,7 +48,7 @@ public class PisoResource {
   }
 
   @PostMapping("/{id}/preguntas")
-  public PisoDTO preguntar(@PathVariable Long id, @RequestBody @Valid PreguntaDTO pregunta, Errors errors) throws RequestBodyNotValidException, NotFoundException {
+  public PisoDTO preguntar(@PathVariable Long id, @RequestBody @Valid TextoMensajesDTO pregunta, Errors errors) throws RequestBodyNotValidException, NotFoundException {
     if (errors.hasErrors()) {
       throw new RequestBodyNotValidException(errors);
     }
@@ -60,6 +58,19 @@ public class PisoResource {
       throw new NotFoundException(id.toString(), Piso.class);
     }
     return pisoService.preguntar(id, pregunta);
+  }
+
+  @PostMapping("/{id}/preguntas/{pregunta}")
+  public PisoDTO responder(@PathVariable Long id, @PathVariable Long pregunta, @RequestBody @Valid TextoMensajesDTO respuesta, Errors errors) throws RequestBodyNotValidException, NotFoundException, IdAndBodyNotMatchingOnUpdateException, OperationNotAllowed {
+    if (errors.hasErrors()) {
+      throw new RequestBodyNotValidException(errors);
+    }
+    try {
+      pisoService.findById(id);
+    } catch (NotFoundException e) {
+      throw new NotFoundException(id.toString(), Piso.class);
+    }
+    return pisoService.responder(id, pregunta, respuesta);
   }
 
   @PostMapping("/{id}/imagenes")

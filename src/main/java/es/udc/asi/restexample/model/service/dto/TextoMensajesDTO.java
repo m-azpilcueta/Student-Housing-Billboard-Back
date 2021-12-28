@@ -1,13 +1,13 @@
 package es.udc.asi.restexample.model.service.dto;
 
-public class PreguntaDTO {
+public class TextoMensajesDTO {
   private String texto;
 
-  public PreguntaDTO() {
+  public TextoMensajesDTO() {
 
   }
 
-  public PreguntaDTO(String texto) {
+  public TextoMensajesDTO(String texto) {
     this.texto = texto;
   }
 
