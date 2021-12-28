@@ -73,6 +73,22 @@ public class PisoResource {
     return pisoService.responder(id, pregunta, respuesta);
   }
 
+  @PutMapping("/{id}/preguntas/{idMensaje}")
+  public PisoDTO modificarMensaje(@PathVariable Long id, @PathVariable Long idMensaje, @RequestBody @Valid ActualizarMensajeDTO mensaje, Errors errors) throws RequestBodyNotValidException, NotFoundException, OperationNotAllowed, IdAndBodyNotMatchingOnUpdateException {
+    if (errors.hasErrors()) {
+      throw new RequestBodyNotValidException(errors);
+    }
+    try {
+      pisoService.findById(id);
+    } catch (NotFoundException e) {
+      throw new NotFoundException(id.toString(), Piso.class);
+    }
+    if (idMensaje != mensaje.getIdMensaje()) {
+      throw new IdAndBodyNotMatchingOnUpdateException(Mensaje.class);
+    }
+    return pisoService.modificarMensaje(id, idMensaje, mensaje);
+  }
+
   @PostMapping("/{id}/imagenes")
   @ResponseStatus(HttpStatus.OK)
   public void guardarImagenes(@PathVariable Long id, @RequestParam Set<MultipartFile> imagenes) throws NotFoundException, OperationNotAllowed {

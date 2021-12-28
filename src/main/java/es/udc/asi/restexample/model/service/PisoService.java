@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -110,6 +111,21 @@ public class PisoService {
     p.getMensajes().add(m);
     pisoDao.update(p);
     return new PisoDTO(p);
+  }
+
+  @PreAuthorize("isAuthenticated()")
+  @Transactional(readOnly = false)
+  public PisoDTO modificarMensaje(Long idPiso, Long idMensaje, ActualizarMensajeDTO texto) throws OperationNotAllowed, NotFoundException {
+    Mensaje m = mensajeDao.find(idMensaje);
+    if (m == null) throw new NotFoundException(idMensaje.toString(), Mensaje.class);
+    UserDTOPrivate currentUser = userService.getCurrentUserWithAuthority();
+    if (!currentUser.getId().equals(m.getUsuario().getIdUsuario()) & !currentUser.getAuthority().equalsIgnoreCase("ADMIN")) {
+      throw new OperationNotAllowed("Current user does not match message creator");
+    }
+    m.setTexto(texto.getTexto());
+    m.setFecha(LocalDateTime.now());
+    mensajeDao.update(m);
+    return new PisoDTO(pisoDao.findById(idPiso));
   }
 
   @PreAuthorize("isAuthenticated()")
