@@ -9,6 +9,7 @@ import es.udc.asi.restexample.model.service.PisoService;
 import es.udc.asi.restexample.model.service.dto.ActualizarImagenDTO;
 import es.udc.asi.restexample.model.service.dto.ImagenDTO;
 import es.udc.asi.restexample.model.service.dto.PisoDTO;
+import es.udc.asi.restexample.model.service.dto.PreguntaDTO;
 import es.udc.asi.restexample.web.exceptions.IdAndBodyNotMatchingOnUpdateException;
 import es.udc.asi.restexample.web.exceptions.RequestBodyNotValidException;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -46,6 +47,19 @@ public class PisoResource {
       throw new RequestBodyNotValidException(errors);
     }
     return pisoService.create(piso);
+  }
+
+  @PostMapping("/{id}/preguntas")
+  public PisoDTO preguntar(@PathVariable Long id, @RequestBody @Valid PreguntaDTO pregunta, Errors errors) throws RequestBodyNotValidException, NotFoundException {
+    if (errors.hasErrors()) {
+      throw new RequestBodyNotValidException(errors);
+    }
+    try {
+      pisoService.findById(id);
+    } catch (NotFoundException e) {
+      throw new NotFoundException(id.toString(), Piso.class);
+    }
+    return pisoService.preguntar(id, pregunta);
   }
 
   @PostMapping("/{id}/imagenes")

@@ -47,6 +47,8 @@ public class PisoDTO {
 
   private Set<ImagenDTO> imagenes = new HashSet<>();
 
+  private Set<MensajeDTO> mensajes = new HashSet<>();
+
   public PisoDTO() {
 
   }
@@ -71,6 +73,9 @@ public class PisoDTO {
     this.anunciante = new UserDTOPublic(piso.getAnunciante());
     if (piso.getImagenes() != null) {
       piso.getImagenes().forEach(i -> this.imagenes.add(new ImagenDTO(i.getIdImagen(), i.getNombre(), i.getPath(), i.isPortada())));
+    }
+    if (piso.getMensajes() != null) {
+      piso.getMensajes().forEach(m -> this.mensajes.add(new MensajeDTO(m)));
     }
   }
 
@@ -216,5 +221,13 @@ public class PisoDTO {
 
   public void setImagenes(Set<ImagenDTO> imagenes) {
     this.imagenes = imagenes;
+  }
+
+  public Set<MensajeDTO> getMensajes() {
+    return mensajes;
+  }
+
+  public void setMensajes(Set<MensajeDTO> mensajes) {
+    this.mensajes = mensajes;
   }
 }

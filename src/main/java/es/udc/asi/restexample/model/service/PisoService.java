@@ -1,17 +1,16 @@
 package es.udc.asi.restexample.model.service;
 
-import es.udc.asi.restexample.model.domain.Imagen;
-import es.udc.asi.restexample.model.domain.Localidad;
-import es.udc.asi.restexample.model.domain.Piso;
-import es.udc.asi.restexample.model.domain.Provincia;
+import es.udc.asi.restexample.model.domain.*;
 import es.udc.asi.restexample.model.exception.ModelException;
 import es.udc.asi.restexample.model.exception.NotFoundException;
 import es.udc.asi.restexample.model.exception.OperationNotAllowed;
 import es.udc.asi.restexample.model.repository.ImagenDao;
+import es.udc.asi.restexample.model.repository.MensajeDao;
 import es.udc.asi.restexample.model.repository.PisoDao;
 import es.udc.asi.restexample.model.repository.UserDao;
 import es.udc.asi.restexample.model.service.dto.ImagenDTO;
 import es.udc.asi.restexample.model.service.dto.PisoDTO;
+import es.udc.asi.restexample.model.service.dto.PreguntaDTO;
 import es.udc.asi.restexample.model.service.dto.UserDTOPrivate;
 import es.udc.asi.restexample.model.service.util.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +35,9 @@ public class PisoService {
 
   @Autowired
   private ImagenDao imagenDao;
+
+  @Autowired
+  private MensajeDao mensajeDao;
 
   @Autowired
   private UserService userService;
@@ -74,6 +76,20 @@ public class PisoService {
     setEnums(p, piso);
     p.setAnunciante(userDao.findById(userService.getCurrentUserWithAuthority().getId()));
     pisoDao.create(p);
+    return new PisoDTO(p);
+  }
+
+  @PreAuthorize("hasAuthority('USER')")
+  @Transactional(readOnly = false)
+  public PisoDTO preguntar(Long id, PreguntaDTO pregunta) {
+    Piso p = pisoDao.findById(id);
+    Mensaje m = new Mensaje(pregunta);
+    m.setUsuario(userDao.findById(userService.getCurrentUserWithAuthority().getId()));
+    m.setPregunta(null);
+    m.setRespuesta(null);
+    mensajeDao.create(m);
+    p.getMensajes().add(m);
+    pisoDao.update(p);
     return new PisoDTO(p);
   }
 
