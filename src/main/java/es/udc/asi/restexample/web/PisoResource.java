@@ -89,6 +89,16 @@ public class PisoResource {
     return pisoService.modificarMensaje(id, idMensaje, mensaje);
   }
 
+  @DeleteMapping("/{id}/preguntas/{idMensaje}")
+  public PisoDTO borrarMensaje(@PathVariable Long id, @PathVariable Long idMensaje) throws NotFoundException, OperationNotAllowed {
+    try {
+      pisoService.findById(id);
+    } catch (NotFoundException e) {
+      throw new NotFoundException(id.toString(), Piso.class);
+    }
+    return pisoService.borrarMensajes(id, idMensaje);
+  }
+
   @PostMapping("/{id}/imagenes")
   @ResponseStatus(HttpStatus.OK)
   public void guardarImagenes(@PathVariable Long id, @RequestParam Set<MultipartFile> imagenes) throws NotFoundException, OperationNotAllowed {

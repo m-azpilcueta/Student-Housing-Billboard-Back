@@ -20,4 +20,9 @@ public class MensajeDaoJpa extends GenericDaoJpa implements MensajeDao {
   public void update(Mensaje mensaje) {
     entityManager.merge(mensaje);
   }
+
+  @Override
+  public void delete(Mensaje mensaje) {
+    entityManager.remove(mensaje);
+  }
 }

@@ -130,6 +130,26 @@ public class PisoService {
 
   @PreAuthorize("isAuthenticated()")
   @Transactional(readOnly = false)
+  public PisoDTO borrarMensajes(Long idPiso, Long idMensaje) throws NotFoundException, OperationNotAllowed {
+    Mensaje m = mensajeDao.find(idMensaje);
+    if (m == null) throw new NotFoundException(idMensaje.toString(), Mensaje.class);
+    UserDTOPrivate currentUser = userService.getCurrentUserWithAuthority();
+    if (!currentUser.getId().equals(m.getUsuario().getIdUsuario()) & !currentUser.getAuthority().equalsIgnoreCase("ADMIN")) {
+      throw new OperationNotAllowed("Current user does not match message creator");
+    }
+    Piso p = pisoDao.findById(idPiso);
+    for (Mensaje mens : p.getMensajes()) {
+      if (idMensaje == mens.getIdMensaje()) {
+        p.getMensajes().remove(mens);
+        break;
+      }
+    }
+    mensajeDao.delete(m);
+    return new PisoDTO(p);
+  }
+
+  @PreAuthorize("isAuthenticated()")
+  @Transactional(readOnly = false)
   public void guardarImagenes(Long id, Set<MultipartFile> imagenes) throws OperationNotAllowed {
     Piso p = pisoDao.findById(id);
     UserDTOPrivate currentUser = userService.getCurrentUserWithAuthority();
