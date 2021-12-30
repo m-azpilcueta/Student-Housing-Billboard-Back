@@ -2,6 +2,10 @@ package es.udc.asi.restexample.web;
 
 import javax.validation.Valid;
 
+import es.udc.asi.restexample.model.exception.EstudioExistsException;
+import es.udc.asi.restexample.model.exception.NotFoundException;
+import es.udc.asi.restexample.model.service.dto.*;
+import es.udc.asi.restexample.web.exceptions.ResourceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.udc.asi.restexample.model.exception.UserLoginExistsException;
 import es.udc.asi.restexample.model.service.UserService;
-import es.udc.asi.restexample.model.service.dto.LoginDTO;
-import es.udc.asi.restexample.model.service.dto.UserDTOPrivate;
 import es.udc.asi.restexample.security.JWTToken;
 import es.udc.asi.restexample.security.TokenProvider;
 import es.udc.asi.restexample.web.exceptions.CredentialsAreNotValidException;
 import es.udc.asi.restexample.web.exceptions.RequestBodyNotValidException;
+
+import java.lang.module.ResolutionException;
+import java.util.List;
 
 /**
  * Este controlador va por separado que el UserResource porque se encarga de
@@ -71,11 +76,22 @@ public class AccountResource {
 
   @PostMapping("/register")
   public void registerAccount(@Valid @RequestBody UserDTOPrivate account, Errors errors)
-      throws UserLoginExistsException, RequestBodyNotValidException {
+    throws UserLoginExistsException, RequestBodyNotValidException, NotFoundException {
     if (errors.hasErrors()) {
       throw new RequestBodyNotValidException(errors);
     }
 
     userService.registerUser(account);
   }
+
+  @GetMapping("/uni")
+  public List<UniversidadDTO> findAllUni() {
+    return userService.findAllUni();
+  }
+
+  @GetMapping("/estudios")
+  public List<EstudioDTO> findAllEstudios() {
+    return userService.findAllEstudios();
+  }
+
 }

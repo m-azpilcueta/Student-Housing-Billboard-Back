@@ -8,6 +8,10 @@ public class UniversidadDTO {
 
     private String nombreUniversidad;
 
+    public UniversidadDTO (){
+
+    }
+
     public UniversidadDTO(Universidad universidad) {
       this.idUniversidad = universidad.getIdUniversidad();
       this.nombreUniversidad = universidad.getNombre();

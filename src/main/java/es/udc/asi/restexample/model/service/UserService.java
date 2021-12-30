@@ -3,15 +3,18 @@ package es.udc.asi.restexample.model.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.aspectj.weaver.ast.Not;
+import es.udc.asi.restexample.model.domain.*;
+import es.udc.asi.restexample.model.repository.EstudioDao;
+import es.udc.asi.restexample.model.repository.UniversidadDao;
+import es.udc.asi.restexample.model.service.dto.EstudioDTO;
+import es.udc.asi.restexample.model.service.dto.UniversidadDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import es.udc.asi.restexample.model.domain.User;
-import es.udc.asi.restexample.model.domain.UserAuthority;
 import es.udc.asi.restexample.model.exception.NotFoundException;
 import es.udc.asi.restexample.model.exception.OperationNotAllowed;
 import es.udc.asi.restexample.model.exception.UserLoginExistsException;
@@ -30,6 +33,12 @@ public class UserService {
   @Autowired
   private UserDao userDAO;
 
+  @Autowired
+  private EstudioDao estudioDAO;
+
+  @Autowired
+  private UniversidadDao universidadDAO;
+
   public List<UserDTOPublic> findAll() {
     return userDAO.findAll().stream().map(user -> new UserDTOPublic(user)).collect(Collectors.toList());
   }
@@ -43,28 +52,42 @@ public class UserService {
   }
 
   @Transactional(readOnly = false)
-  public void registerUser(UserDTOPrivate account) throws UserLoginExistsException {
-    registerUser(account.getLogin(), account.getPassword(), account.getNombre(),account.getTelefonoContacto(), account.getEmail(), false);
+  public void registerUser(UserDTOPrivate account) throws UserLoginExistsException, NotFoundException {
+    registerUser(account, false);
   }
 
   @Transactional(readOnly = false)
-  public void registerUser(String login, String password, String nombre, String telefonoContacto, String email, boolean isAdmin) throws UserLoginExistsException {
-    if (userDAO.findByLogin(login) != null) {
-      throw new UserLoginExistsException(login);
+  public void registerUser(UserDTOPrivate account, boolean isAdmin) throws UserLoginExistsException, NotFoundException {
+    if (userDAO.findByLogin(account.getLogin()) != null) {
+      throw new UserLoginExistsException(account.getLogin());
     }
 
-    User user = new User();
-    String encryptedPassword = passwordEncoder.encode(password);
+    User user = new User( );
+    String encryptedPassword = passwordEncoder.encode(account.getPassword());
 
-    user.setLogin(login);
+    user.setLogin(account.getLogin());
     user.setContrasena(encryptedPassword);
-    user.setNombre(nombre);
-    user.setTelefonoContacto(telefonoContacto);
-    user.setEmail(email);
+    user.setNombre(account.getNombre());
+    user.setTelefonoContacto(account.getTelefonoContacto());
+    user.setEmail(account.getEmail());
+
+    if (estudioDAO.findById(account.getEstudio().getIdEstudio()) == null) {
+      throw new NotFoundException(account.getEstudio().getIdEstudio().toString(), Estudio.class);
+    }
+
+    user.setEstudio(estudioDAO.findById(account.getEstudio().getIdEstudio()));
+
     user.setAuthority(UserAuthority.USER);
     if (isAdmin) {
       user.setAuthority(UserAuthority.ADMIN);
     }
+
+    /*if (account.getEstudio().getIdEstudio() == null ) {
+      EstudioDTO actualizado = createEstudio(account.getEstudio());
+      user.setEstudio(estudioDAO.findById(actualizado.getIdEstudio()));
+    } else {
+      user.setEstudio(estudioDAO.findById(account.getEstudio().getIdEstudio()));
+    }*/
 
     userDAO.create(user);
   }
@@ -94,4 +117,24 @@ public class UserService {
     }
     return null;
   }
+
+  public EstudioDTO createEstudio(EstudioDTO estudio) {
+
+    Estudio new_estudio = new Estudio(estudio.getNombreEstudio());
+
+    new_estudio.setUniversidad(universidadDAO.findById(estudio.getUniversidad().getIdUniversidad()));
+
+    estudioDAO.create(new_estudio);
+
+    return new EstudioDTO(new_estudio);
+  }
+
+  public List<UniversidadDTO> findAllUni() {
+    return universidadDAO.findAll().stream().map(universidad -> new UniversidadDTO(universidad)).collect(Collectors.toList());
+  }
+
+  public List<EstudioDTO> findAllEstudios() {
+    return estudioDAO.findAll().stream().map(estudio -> new EstudioDTO(estudio)).collect(Collectors.toList());
+  }
+
 }

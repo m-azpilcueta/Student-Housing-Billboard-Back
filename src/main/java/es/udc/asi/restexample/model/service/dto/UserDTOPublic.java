@@ -14,6 +14,7 @@ public class UserDTOPublic {
   private String telefonoContacto;
   private String email;
   private boolean active = true;
+  private EstudioDTO estudio;
 
  /* private List<PisoDTO> pisos = new ArrayList<>();
   private List<PisoDTO> favoritos = new ArrayList<>();
@@ -27,6 +28,7 @@ public class UserDTOPublic {
     this.nombre = user.getNombre();
     this.telefonoContacto = user.getTelefonoContacto();
     this.email = user.getEmail();
+    this.estudio = new EstudioDTO(user.getEstudio());
     this.setActive(user.isActive());
 
     /*user.getPisos().forEach(p -> {
@@ -87,6 +89,14 @@ public class UserDTOPublic {
 
   public void setActive(boolean active) {
     this.active = active;
+  }
+
+  public EstudioDTO getEstudio() {
+    return estudio;
+  }
+
+  public void setEstudio(EstudioDTO estudio) {
+    this.estudio = estudio;
   }
 
   /*

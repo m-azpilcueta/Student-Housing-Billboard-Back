@@ -1,6 +1,5 @@
 package es.udc.asi.restexample.model.service.dto;
 
-import com.sun.istack.Nullable;
 import es.udc.asi.restexample.model.domain.Estudio;
 
 public class EstudioDTO {

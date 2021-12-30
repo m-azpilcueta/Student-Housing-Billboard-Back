@@ -46,6 +46,16 @@ public class User {
   public User() {
   }
 
+  public User(String login, String contrasena, String nombre, String telefonoContacto, String email, Estudio estudio, UserAuthority authority) {
+    this.login = login;
+    this.contrasena = contrasena;
+    this.nombre = nombre;
+    this.telefonoContacto = telefonoContacto;
+    this.email = email;
+    this.estudio = estudio;
+    this.authority = authority;
+  }
+
   public Long getIdUsuario() {
     return idUsuario;
   }
