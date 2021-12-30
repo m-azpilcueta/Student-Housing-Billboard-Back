@@ -179,7 +179,12 @@ public class PisoService {
 
   @PreAuthorize("isAuthenticated()")
   @Transactional(readOnly = false)
-  public ImagenDTO actualizarImagen(Long idImagen, boolean portada) {
+  public ImagenDTO actualizarImagen(Long idPiso, Long idImagen, boolean portada) {
+    Piso p = pisoDao.findById(idPiso);
+    p.getImagenes().forEach(i -> {
+      i.setPortada(false);
+      imagenDao.update(i);
+    });
     Imagen i = imagenDao.find(idImagen);
     i.setPortada(portada);
     imagenDao.update(i);

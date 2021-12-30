@@ -137,7 +137,7 @@ public class PisoResource {
   }
 
   @PutMapping("/{id}/imagenes/{idImagen}")
-  public ImagenDTO actualizarPortada(@PathVariable Long id, @PathVariable Long idImagen, @RequestBody @Valid ActualizarImagenDTO imagen, Errors errors) throws IdAndBodyNotMatchingOnUpdateException, RequestBodyNotValidException {
+  public ImagenDTO actualizarPortada(@PathVariable Long id, @PathVariable Long idImagen, @RequestBody @Valid ActualizarImagenDTO imagen, Errors errors) throws IdAndBodyNotMatchingOnUpdateException, RequestBodyNotValidException, NotFoundException {
     if (errors.hasErrors()) {
       throw new RequestBodyNotValidException(errors);
     }
@@ -147,7 +147,12 @@ public class PisoResource {
     if (idImagen != imagen.getIdImagen()) {
       throw new IdAndBodyNotMatchingOnUpdateException(Imagen.class);
     }
-    return pisoService.actualizarImagen(imagen.getIdImagen(), imagen.isPortada());
+    try {
+      pisoService.findById(id);
+    } catch (NotFoundException e) {
+      throw new NotFoundException(id.toString(), Piso.class);
+    }
+    return pisoService.actualizarImagen(id, imagen.getIdImagen(), imagen.isPortada());
   }
 
   @DeleteMapping("/{id}/imagenes/{idImagen}")
