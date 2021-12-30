@@ -6,8 +6,7 @@ import java.util.stream.Collectors;
 import es.udc.asi.restexample.model.domain.*;
 import es.udc.asi.restexample.model.repository.EstudioDao;
 import es.udc.asi.restexample.model.repository.UniversidadDao;
-import es.udc.asi.restexample.model.service.dto.EstudioDTO;
-import es.udc.asi.restexample.model.service.dto.UniversidadDTO;
+import es.udc.asi.restexample.model.service.dto.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,8 +18,6 @@ import es.udc.asi.restexample.model.exception.NotFoundException;
 import es.udc.asi.restexample.model.exception.OperationNotAllowed;
 import es.udc.asi.restexample.model.exception.UserLoginExistsException;
 import es.udc.asi.restexample.model.repository.UserDao;
-import es.udc.asi.restexample.model.service.dto.UserDTOPrivate;
-import es.udc.asi.restexample.model.service.dto.UserDTOPublic;
 import es.udc.asi.restexample.security.SecurityUtils;
 
 @Service
@@ -39,6 +36,7 @@ public class UserService {
   @Autowired
   private UniversidadDao universidadDAO;
 
+  @PreAuthorize("hasAuthority('ADMIN')")
   public List<UserDTOPublic> findAll() {
     return userDAO.findAll().stream().map(user -> new UserDTOPublic(user)).collect(Collectors.toList());
   }
@@ -49,6 +47,32 @@ public class UserService {
       throw new NotFoundException(id.toString(), User.class);
     }
     return new UserDTOPublic(userDAO.findById(id));
+  }
+
+  @PreAuthorize("isAuthenticated()")
+  @Transactional(readOnly = false)
+  public UserDTOPrivate update(UserDTOPrivate user) throws NotFoundException {
+    User bdUser = userDAO.findById(user.getId());
+
+    if (bdUser == null) {
+      throw new NotFoundException(user.getId().toString(), User.class);
+    }
+
+    if (estudioDAO.findById(user.getEstudio().getIdEstudio()) == null) {
+      throw new NotFoundException(user.getEstudio().getIdEstudio().toString(), Estudio.class);
+    }
+
+    String encryptedPassword = passwordEncoder.encode(user.getPassword());
+
+    bdUser.setLogin(user.getLogin());
+    bdUser.setContrasena(encryptedPassword);
+    bdUser.setNombre(user.getNombre());
+    bdUser.setTelefonoContacto(user.getTelefonoContacto());
+    bdUser.setEmail(user.getEmail());
+    bdUser.setEstudio(estudioDAO.findById(user.getEstudio().getIdEstudio()));
+
+    userDAO.update(bdUser);
+    return new UserDTOPrivate(bdUser);
   }
 
   @Transactional(readOnly = false)
