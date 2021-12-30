@@ -19,6 +19,10 @@ public class Universidad {
   public Universidad() {
   }
 
+  public Universidad(String nombre) {
+    this.nombre = nombre;
+  }
+
   public Long getIdUniversidad() {
     return idUniversidad;
   }

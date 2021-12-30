@@ -1,6 +1,7 @@
 package es.udc.asi.restexample.model.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "theEstudio")
@@ -10,6 +11,7 @@ public class Estudio {
   @SequenceGenerator(name = "estudio_generator", sequenceName = "estud_seq")
   private Long idEstudio;
 
+  @NotNull
   private String nombre;
 
   @ManyToOne (fetch =  FetchType.EAGER)
@@ -17,6 +19,15 @@ public class Estudio {
   private Universidad universidad;
 
   public Estudio() {
+  }
+
+  public Estudio(String nombre) {
+    this.nombre = nombre;
+  }
+
+  public Estudio(String nombre, Universidad universidad) {
+    this(nombre);
+    this.universidad = universidad;
   }
 
   public Long getIdEstudio() {

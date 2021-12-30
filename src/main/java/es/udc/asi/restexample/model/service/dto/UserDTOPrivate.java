@@ -1,7 +1,6 @@
 package es.udc.asi.restexample.model.service.dto;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import es.udc.asi.restexample.model.domain.User;
@@ -28,6 +27,8 @@ public class UserDTOPrivate {
   @Size(min = 4)
   private String email;
 
+  private EstudioDTO estudio;
+
   public UserDTOPrivate() {
   }
 
@@ -37,6 +38,7 @@ public class UserDTOPrivate {
     this.nombre = user.getNombre();
     this.telefonoContacto = user.getTelefonoContacto();
     this.email = user.getEmail();
+    this.estudio = new EstudioDTO(user.getEstudio());
     this.authority = user.getAuthority().name();
   }
 
@@ -86,6 +88,14 @@ public class UserDTOPrivate {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public EstudioDTO getEstudio() {
+    return estudio;
+  }
+
+  public void setEstudio(EstudioDTO estudio) {
+    this.estudio = estudio;
   }
 
   public String getAuthority() {
