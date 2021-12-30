@@ -156,7 +156,8 @@ public class PisoService {
     if (!currentUser.getId().equals(p.getAnunciante().getIdUsuario())) {
       throw new OperationNotAllowed("Current user does not match piso creator");
     }
-    Set<Imagen> imagenesdb = new HashSet<>();
+    if (p.getImagenes().size() + imagenes.size() > 20)
+      throw new OperationNotAllowed("Image number exceeded. Max. number is 20");
     imagenes.forEach(imagen -> {
       String path;
       try {
@@ -167,9 +168,8 @@ public class PisoService {
       }
       Imagen i = new Imagen(imagen.getOriginalFilename(), path);
       imagenDao.create(i);
-      imagenesdb.add(i);
+      p.getImagenes().add(i);
     });
-    p.setImagenes(imagenesdb);
     pisoDao.update(p);
   }
 
