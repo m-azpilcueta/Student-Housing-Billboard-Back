@@ -43,9 +43,19 @@ public class UserResource {
     if (id != user.getId()) {
       throw new IdAndBodyNotMatchingOnUpdateException(User.class);
     }
-
     return userService.update(user);
   }
 
+  @PutMapping("/{id}/activate")
+  public UserDTOPublic activate(@PathVariable Long id) throws NotFoundException, OperationNotAllowed {
+    return userService.updateActive(id, true);
+  }
+
+  @PutMapping("/{id}/desactivate")
+  public UserDTOPublic desactivate(@PathVariable Long id) throws NotFoundException, OperationNotAllowed {
+    return userService.updateActive(id, false);
+  }
+
+  //HU26. Borrar usuario
 
 }

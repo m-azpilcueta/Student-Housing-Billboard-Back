@@ -75,6 +75,24 @@ public class UserService {
     return new UserDTOPrivate(bdUser);
   }
 
+  @PreAuthorize("hasAuthority('ADMIN')")
+  @Transactional(readOnly = false)
+  public UserDTOPublic updateActive(Long id, boolean active) throws NotFoundException, OperationNotAllowed {
+    User user = userDAO.findById(id);
+    if (user == null) {
+      throw new NotFoundException(id.toString(), User.class);
+    }
+
+    UserDTOPrivate currentUser = getCurrentUserWithAuthority();
+    if (currentUser.getId().equals(user.getIdUsuario())) {
+      throw new OperationNotAllowed("The user cannot activate/deactive itself");
+    }
+
+    user.setActive(active);
+    userDAO.update(user);
+    return new UserDTOPublic(user);
+  }
+
   @Transactional(readOnly = false)
   public void registerUser(UserDTOPrivate account) throws UserLoginExistsException, NotFoundException {
     registerUser(account, false);
@@ -116,24 +134,6 @@ public class UserService {
     userDAO.create(user);
   }
 
-  @PreAuthorize("hasAuthority('ADMIN')")
-  @Transactional(readOnly = false)
-  public UserDTOPublic updateActive(Long id, boolean active) throws NotFoundException, OperationNotAllowed {
-    User user = userDAO.findById(id);
-    if (user == null) {
-      throw new NotFoundException(id.toString(), User.class);
-    }
-
-    UserDTOPrivate currentUser = getCurrentUserWithAuthority();
-    if (currentUser.getId().equals(user.getIdUsuario())) {
-      throw new OperationNotAllowed("The user cannot activate/deactive itself");
-    }
-
-    user.setActive(active);
-    userDAO.update(user);
-    return new UserDTOPublic(user);
-  }
-
   public UserDTOPrivate getCurrentUserWithAuthority() {
     String currentUserLogin = SecurityUtils.getCurrentUserLogin();
     if (currentUserLogin != null) {
@@ -143,13 +143,11 @@ public class UserService {
   }
 
   public EstudioDTO createEstudio(EstudioDTO estudio) {
-
     Estudio new_estudio = new Estudio(estudio.getNombreEstudio());
 
     new_estudio.setUniversidad(universidadDAO.findById(estudio.getUniversidad().getIdUniversidad()));
 
     estudioDAO.create(new_estudio);
-
     return new EstudioDTO(new_estudio);
   }
 
