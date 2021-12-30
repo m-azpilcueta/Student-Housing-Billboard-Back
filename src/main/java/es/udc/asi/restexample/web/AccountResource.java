@@ -2,10 +2,8 @@ package es.udc.asi.restexample.web;
 
 import javax.validation.Valid;
 
-import es.udc.asi.restexample.model.exception.EstudioExistsException;
 import es.udc.asi.restexample.model.exception.NotFoundException;
 import es.udc.asi.restexample.model.service.dto.*;
-import es.udc.asi.restexample.web.exceptions.ResourceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
