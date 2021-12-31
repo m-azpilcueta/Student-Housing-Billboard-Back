@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import es.udc.asi.restexample.model.domain.*;
 import es.udc.asi.restexample.model.repository.EstudioDao;
+import es.udc.asi.restexample.model.repository.PisoDao;
 import es.udc.asi.restexample.model.repository.UniversidadDao;
 import es.udc.asi.restexample.model.service.dto.*;
 
@@ -29,6 +30,9 @@ public class UserService {
 
   @Autowired
   private UserDao userDAO;
+
+  @Autowired
+  private PisoDao pisoDAO;
 
   @Autowired
   private EstudioDao estudioDAO;
@@ -142,13 +146,26 @@ public class UserService {
     return null;
   }
 
-  public EstudioDTO createEstudio(EstudioDTO estudio) {
-    Estudio new_estudio = new Estudio(estudio.getNombreEstudio());
+  @PreAuthorize("hasAuthority('USER')")
+  @Transactional(readOnly = false)
+  public UserDTOPublic insertarFavorito(Long id, PisoDTO favorito) throws NotFoundException, OperationNotAllowed {
+    User user = userDAO.findById(id);
 
-    new_estudio.setUniversidad(universidadDAO.findById(estudio.getUniversidad().getIdUniversidad()));
+    if (user == null) {
+      throw new NotFoundException(id.toString(), User.class);
+    }
 
-    estudioDAO.create(new_estudio);
-    return new EstudioDTO(new_estudio);
+    if (id.equals(favorito.getIdPiso())) {
+      throw new OperationNotAllowed("El anunciante de un piso no puede añadirlo a su lista de favoritos");
+    }
+
+    if (pisoDAO.findById(favorito.getIdPiso()) == null) {
+      throw new NotFoundException(favorito.getIdPiso().toString(), Piso.class);
+    }
+
+    user.getFavoritos().add(pisoDAO.findById(favorito.getIdPiso()));
+
+    return new UserDTOPublic(user);
   }
 
   public List<UniversidadDTO> findAllUni() {

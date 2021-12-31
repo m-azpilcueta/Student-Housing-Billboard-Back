@@ -5,6 +5,8 @@ import es.udc.asi.restexample.model.domain.User;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UserDTOPublic {
@@ -16,6 +18,7 @@ public class UserDTOPublic {
   private boolean active = true;
   private EstudioDTO estudio;
 
+  private Set<PisoDTO> favoritos = new HashSet<>();
  /* private List<PisoDTO> pisos = new ArrayList<>();
   private List<PisoDTO> favoritos = new ArrayList<>();
 */
@@ -30,17 +33,7 @@ public class UserDTOPublic {
     this.email = user.getEmail();
     this.estudio = new EstudioDTO(user.getEstudio());
     this.setActive(user.isActive());
-
-    /*user.getPisos().forEach(p -> {
-      this.pisos.add(new PisoDTO(p));
-    });
-    this.pisos.sort(Comparator.comparing(PisoDTO::getName));
-    user.getFavoritos().forEach(fav -> {
-      this.favoritos.add(new PisoDTO(fav));
-    });
-    this.favoritos.sort(Comparator.comparing(PisoDTO::getName));
-
-     */
+    this.setFavoritos(user.getFavoritos().stream().map(fav -> new PisoDTO(fav)).collect(Collectors.toSet()));
   }
 
   public Long getId() {
@@ -99,23 +92,12 @@ public class UserDTOPublic {
     this.estudio = estudio;
   }
 
-  /*
-
-  public List<PisoDTO> getPisos() {
-    return pisos;
-  }
-
-  public void setPisos(List<PisoDTO> pisos) {
-    this.pisos = pisos;
-  }
-
-  public List<PisoDTO> getFavoritos() {
+  public Set<PisoDTO> getFavoritos() {
     return favoritos;
   }
 
-  public void setFavoritos(List<PisoDTO> favoritos) {
+  public void setFavoritos(Set<PisoDTO> favoritos) {
     this.favoritos = favoritos;
   }
 
- */
 }

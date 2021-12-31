@@ -1,19 +1,24 @@
 package es.udc.asi.restexample.web;
 
 import java.util.List;
+import java.util.Set;
 
+import es.udc.asi.restexample.model.domain.Piso;
 import es.udc.asi.restexample.model.domain.User;
 import es.udc.asi.restexample.model.exception.NotFoundException;
 import es.udc.asi.restexample.model.exception.OperationNotAllowed;
+import es.udc.asi.restexample.model.service.dto.PisoDTO;
 import es.udc.asi.restexample.model.service.dto.UserDTOPrivate;
 import es.udc.asi.restexample.web.exceptions.IdAndBodyNotMatchingOnUpdateException;
 import es.udc.asi.restexample.web.exceptions.RequestBodyNotValidException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import es.udc.asi.restexample.model.service.UserService;
 import es.udc.asi.restexample.model.service.dto.UserDTOPublic;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -57,5 +62,18 @@ public class UserResource {
   }
 
   //HU26. Borrar usuario
+
+  @PutMapping("/{id}/favoritos")
+  @ResponseStatus(HttpStatus.OK)
+  public UserDTOPublic insertarFavorito(@PathVariable Long id, @RequestBody @Valid PisoDTO favorito, Errors errors) throws RequestBodyNotValidException, NotFoundException,
+    OperationNotAllowed {
+    if (errors.hasErrors()) {
+      throw new RequestBodyNotValidException(errors);
+    }
+
+    return userService.insertarFavorito(id, favorito);
+  }
+
+
 
 }

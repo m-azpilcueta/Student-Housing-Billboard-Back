@@ -79,6 +79,10 @@ public class PisoDTO {
     }
   }
 
+  public PisoDTO(Long idPiso) {
+    this.idPiso = idPiso;
+  }
+
   public Long getIdPiso() {
     return idPiso;
   }
