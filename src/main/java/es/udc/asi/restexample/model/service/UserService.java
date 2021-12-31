@@ -155,7 +155,7 @@ public class UserService {
       throw new NotFoundException(id.toString(), User.class);
     }
 
-    if (id.equals(favorito.getIdPiso())) {
+    if (id.equals(favorito.getAnunciante().getId())) {
       throw new OperationNotAllowed("El anunciante de un piso no puede añadirlo a su lista de favoritos");
     }
 
@@ -165,6 +165,26 @@ public class UserService {
 
     user.getFavoritos().add(pisoDAO.findById(favorito.getIdPiso()));
 
+    return new UserDTOPublic(user);
+  }
+
+  @PreAuthorize("hasAuthority('USER')")
+  @Transactional(readOnly = false)
+  public UserDTOPublic borrarFavorito(Long id, Long idPiso) throws NotFoundException, OperationNotAllowed {
+    User user = userDAO.findById(id);
+
+    if (user == null) {
+      throw new NotFoundException(id.toString(), User.class);
+    }
+
+    Piso piso = pisoDAO.findById(idPiso);
+    if ( piso == null) {
+      throw new NotFoundException(idPiso.toString(), Piso.class);
+    }
+
+    user.getFavoritos().remove(piso);
+
+    userDAO.update(user);
     return new UserDTOPublic(user);
   }
 

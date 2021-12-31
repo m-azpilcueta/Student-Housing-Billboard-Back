@@ -63,6 +63,7 @@ public class UserResource {
 
   //HU26. Borrar usuario
 
+
   @PutMapping("/{id}/favoritos")
   @ResponseStatus(HttpStatus.OK)
   public UserDTOPublic insertarFavorito(@PathVariable Long id, @RequestBody @Valid PisoDTO favorito, Errors errors) throws RequestBodyNotValidException, NotFoundException,
@@ -74,6 +75,10 @@ public class UserResource {
     return userService.insertarFavorito(id, favorito);
   }
 
+  @DeleteMapping("/{id}/favoritos/{idPiso}")
+  public UserDTOPublic borrarFavorito(@PathVariable Long id, @PathVariable Long idPiso) throws NotFoundException, OperationNotAllowed {
 
+    return userService.borrarFavorito(id, idPiso);
+  }
 
 }
