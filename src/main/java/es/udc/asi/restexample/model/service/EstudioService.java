@@ -1,7 +1,10 @@
 package es.udc.asi.restexample.model.service;
 
 import es.udc.asi.restexample.model.domain.Estudio;
+import es.udc.asi.restexample.model.domain.Universidad;
+import es.udc.asi.restexample.model.exception.NotFoundException;
 import es.udc.asi.restexample.model.repository.EstudioDao;
+import es.udc.asi.restexample.model.repository.UniversidadDao;
 import es.udc.asi.restexample.model.service.dto.EstudioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,9 +16,19 @@ public class EstudioService {
   @Autowired
   private EstudioDao estudioDao;
 
+  @Autowired
+  private UniversidadDao universidadDao;
+
   @Transactional(readOnly = false)
-  public EstudioDTO crearEstudio(EstudioDTO estudio) {
-    Estudio e = new Estudio(estudio);
+  public EstudioDTO crearEstudio(EstudioDTO estudio) throws NotFoundException {
+    Estudio e = new Estudio(estudio.getNombreEstudio());
+
+    if (universidadDao.findById(estudio.getUniversidad().getIdUniversidad()) == null) {
+      throw new NotFoundException(estudio.getUniversidad().getIdUniversidad().toString(), Universidad.class);
+    }
+
+    e.setUniversidad(universidadDao.findById(estudio.getUniversidad().getIdUniversidad()));
+
     estudioDao.create(e);
     return new EstudioDTO(e);
   }

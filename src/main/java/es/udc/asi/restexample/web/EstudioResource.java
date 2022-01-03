@@ -1,5 +1,6 @@
 package es.udc.asi.restexample.web;
 
+import es.udc.asi.restexample.model.exception.NotFoundException;
 import es.udc.asi.restexample.model.service.EstudioService;
 import es.udc.asi.restexample.model.service.dto.EstudioDTO;
 import es.udc.asi.restexample.web.exceptions.RequestBodyNotValidException;
@@ -19,7 +20,7 @@ public class EstudioResource {
   private EstudioService estudioService;
 
   @PostMapping
-  public EstudioDTO crear(@RequestBody @Valid EstudioDTO estudio, Errors errors) throws RequestBodyNotValidException {
+  public EstudioDTO crear(@RequestBody @Valid EstudioDTO estudio, Errors errors) throws RequestBodyNotValidException, NotFoundException {
     if (errors.hasErrors()) {
       throw new RequestBodyNotValidException(errors);
     }
