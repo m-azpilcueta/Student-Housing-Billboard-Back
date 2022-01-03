@@ -1,5 +1,7 @@
 package es.udc.asi.restexample.model.domain;
 
+import es.udc.asi.restexample.model.service.dto.EstudioDTO;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -28,6 +30,12 @@ public class Estudio {
   public Estudio(String nombre, Universidad universidad) {
     this(nombre);
     this.universidad = universidad;
+  }
+
+  public Estudio(EstudioDTO estudio) {
+    this.idEstudio = estudio.getIdEstudio();
+    this.nombre = estudio.getNombreEstudio();
+    this.universidad = new Universidad(estudio.getUniversidad());
   }
 
   public Long getIdEstudio() {

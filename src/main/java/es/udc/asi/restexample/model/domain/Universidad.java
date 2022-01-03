@@ -1,5 +1,7 @@
 package es.udc.asi.restexample.model.domain;
 
+import es.udc.asi.restexample.model.service.dto.UniversidadDTO;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -21,6 +23,11 @@ public class Universidad {
 
   public Universidad(String nombre) {
     this.nombre = nombre;
+  }
+
+  public Universidad(UniversidadDTO universidadDTO) {
+    this.idUniversidad = universidadDTO.getIdUniversidad();
+    this.nombre = universidadDTO.getNombreUniversidad();
   }
 
   public Long getIdUniversidad() {
