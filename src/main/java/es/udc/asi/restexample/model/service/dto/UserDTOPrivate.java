@@ -115,4 +115,12 @@ public class UserDTOPrivate {
   public void setAuthority(String authority) {
     this.authority = authority;
   }
+
+  public Set<PisoDTO> getFavoritos() {
+    return favoritos;
+  }
+
+  public void setFavoritos(Set<PisoDTO> favoritos) {
+    this.favoritos = favoritos;
+  }
 }

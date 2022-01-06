@@ -150,20 +150,22 @@ public class UserService {
   @Transactional(readOnly = false)
   public UserDTOPublic insertarFavorito(Long id, PisoDTO favorito) throws NotFoundException, OperationNotAllowed {
     User user = userDAO.findById(id);
+    Piso p;
 
     if (user == null) {
       throw new NotFoundException(id.toString(), User.class);
     }
 
-    if (id.equals(favorito.getAnunciante().getId())) {
-      throw new OperationNotAllowed("El anunciante de un piso no puede añadirlo a su lista de favoritos");
-    }
-
-    if (pisoDAO.findById(favorito.getIdPiso()) == null) {
+    if ((p = pisoDAO.findById(favorito.getIdPiso())) == null) {
       throw new NotFoundException(favorito.getIdPiso().toString(), Piso.class);
     }
 
-    user.getFavoritos().add(pisoDAO.findById(favorito.getIdPiso()));
+    if (id.equals(p.getAnunciante().getIdUsuario())) {
+      throw new OperationNotAllowed("El anunciante de un piso no puede añadirlo a su lista de favoritos");
+    }
+
+    user.getFavoritos().add(p);
+    userDAO.update(user);
 
     return new UserDTOPublic(user);
   }
