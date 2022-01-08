@@ -37,9 +37,6 @@ public class UserService {
   @Autowired
   private EstudioDao estudioDAO;
 
-  @Autowired
-  private UniversidadDao universidadDAO;
-
   @PreAuthorize("hasAuthority('ADMIN')")
   public List<UserDTOPublic> findAll() {
     return userDAO.findAll().stream().map(user -> new UserDTOPublic(user)).collect(Collectors.toList());
@@ -189,9 +186,4 @@ public class UserService {
     userDAO.update(user);
     return new UserDTOPublic(user);
   }
-
-  public List<UniversidadDTO> findAllUniversidades() {
-    return universidadDAO.findAll().stream().map(universidad -> new UniversidadDTO(universidad)).collect(Collectors.toList());
-  }
-
 }
