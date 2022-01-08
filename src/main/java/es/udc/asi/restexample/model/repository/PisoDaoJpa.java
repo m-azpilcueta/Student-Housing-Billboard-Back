@@ -2,15 +2,37 @@ package es.udc.asi.restexample.model.repository;
 
 import es.udc.asi.restexample.model.domain.Piso;
 import es.udc.asi.restexample.model.repository.util.GenericDaoJpa;
+import es.udc.asi.restexample.model.service.dto.PisoSortType;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
 public class PisoDaoJpa extends GenericDaoJpa implements PisoDao {
   @Override
-  public List<Piso> findAll() {
-    return entityManager.createQuery("from Piso p where p.anunciante.active = TRUE", Piso.class).getResultList();
+  public List<Piso> findAll(PisoSortType sort) {
+    String queryStr = "select p from Piso p";
+    String sortStr = "p.fechaPublicacion desc";
+    if (sort != null) {
+      switch (sort) {
+        case MAS_RECIENTE:
+          sortStr = "p.fechaPublicacion desc";
+          break;
+        case MENOS_RECIENTE:
+          sortStr = "p.fechaPublicacion asc";
+          break;
+        case IMPORTE_ASCENDENTE:
+          sortStr = "p.importe asc";
+          break;
+        case IMPORTE_DESCENDENTE:
+          sortStr = "p.importe desc";
+          break;
+      }
+    }
+    queryStr += " order by " + sortStr;
+    TypedQuery<Piso> query = entityManager.createQuery(queryStr, Piso.class);
+    return query.getResultList();
   }
 
   @Override
