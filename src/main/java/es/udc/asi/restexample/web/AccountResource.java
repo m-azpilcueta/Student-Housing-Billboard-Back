@@ -80,5 +80,4 @@ public class AccountResource {
 
     userService.registerUser(account);
   }
-
 }
