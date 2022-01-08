@@ -190,8 +190,4 @@ public class UserService {
     return new UserDTOPublic(user);
   }
 
-  public List<UniversidadDTO> findAllUniversidades() {
-    return universidadDAO.findAll().stream().map(universidad -> new UniversidadDTO(universidad)).collect(Collectors.toList());
-  }
-
 }

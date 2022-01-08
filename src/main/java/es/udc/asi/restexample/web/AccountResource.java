@@ -81,9 +81,4 @@ public class AccountResource {
     userService.registerUser(account);
   }
 
-  @GetMapping("/universidades")
-  public List<UniversidadDTO> findAllUniversidades() {
-    return userService.findAllUniversidades();
-  }
-
 }

@@ -40,13 +40,4 @@ public class EstudioService {
     estudioDao.create(e);
     return new EstudioDTO(e);
   }
-
-  public List<EstudioDTO> findAllByUniversidad(Long id) throws NotFoundException {
-    Universidad universidad = universidadDao.findById(id);
-    if (universidad == null){
-      throw new NotFoundException(id.toString(), Universidad.class);
-    }
-    return estudioDao.findAllByUniversidad(id).stream().map(estudio -> new EstudioDTO(estudio)).collect(Collectors.toList());
-
-  }
 }

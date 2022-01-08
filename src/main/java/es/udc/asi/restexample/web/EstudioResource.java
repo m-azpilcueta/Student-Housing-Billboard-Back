@@ -22,12 +22,6 @@ public class EstudioResource {
     return estudioService.findAllEstudios();
   }
 
-
-  @GetMapping("/universidad/{id}")
-  public List<EstudioDTO> findAllByUniversidad(@PathVariable Long id ) throws NotFoundException {
-    return estudioService.findAllByUniversidad(id);
-  }
-
   @PostMapping
   public EstudioDTO crear(@RequestBody @Valid EstudioDTO estudio, Errors errors) throws RequestBodyNotValidException, NotFoundException {
     if (errors.hasErrors()) {
