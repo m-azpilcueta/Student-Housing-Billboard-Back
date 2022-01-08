@@ -26,7 +26,6 @@ import es.udc.asi.restexample.security.TokenProvider;
 import es.udc.asi.restexample.web.exceptions.CredentialsAreNotValidException;
 import es.udc.asi.restexample.web.exceptions.RequestBodyNotValidException;
 
-import java.lang.module.ResolutionException;
 import java.util.List;
 
 /**
@@ -82,14 +81,9 @@ public class AccountResource {
     userService.registerUser(account);
   }
 
-  @GetMapping("/uni")
-  public List<UniversidadDTO> findAllUni() {
-    return userService.findAllUni();
-  }
-
-  @GetMapping("/estudios")
-  public List<EstudioDTO> findAllEstudios() {
-    return userService.findAllEstudios();
+  @GetMapping("/universidades")
+  public List<UniversidadDTO> findAllUniversidades() {
+    return userService.findAllUniversidades();
   }
 
 }

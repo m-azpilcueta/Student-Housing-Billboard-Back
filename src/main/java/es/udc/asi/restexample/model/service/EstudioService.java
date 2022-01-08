@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional(readOnly = true, rollbackFor = Exception.class)
 public class EstudioService {
@@ -18,6 +21,11 @@ public class EstudioService {
 
   @Autowired
   private UniversidadDao universidadDao;
+
+
+  public List<EstudioDTO> findAllEstudios() {
+    return estudioDao.findAll().stream().map(estudio -> new EstudioDTO(estudio)).collect(Collectors.toList());
+  }
 
   @Transactional(readOnly = false)
   public EstudioDTO crearEstudio(EstudioDTO estudio) throws NotFoundException {
@@ -31,5 +39,14 @@ public class EstudioService {
 
     estudioDao.create(e);
     return new EstudioDTO(e);
+  }
+
+  public List<EstudioDTO> findAllByUniversidad(Long id) throws NotFoundException {
+    Universidad universidad = universidadDao.findById(id);
+    if (universidad == null){
+      throw new NotFoundException(id.toString(), Universidad.class);
+    }
+    return estudioDao.findAllByUniversidad(id).stream().map(estudio -> new EstudioDTO(estudio)).collect(Collectors.toList());
+
   }
 }

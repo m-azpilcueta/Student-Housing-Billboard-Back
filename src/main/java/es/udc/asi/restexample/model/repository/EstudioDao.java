@@ -3,6 +3,7 @@ package es.udc.asi.restexample.model.repository;
 import es.udc.asi.restexample.model.domain.Estudio;
 import es.udc.asi.restexample.model.domain.User;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface EstudioDao {
@@ -15,4 +16,5 @@ public interface EstudioDao {
 
   void create(Estudio estudio);
 
+  List<Estudio> findAllByUniversidad(Long id);
 }

@@ -31,7 +31,13 @@ public class EstudioDaoJpa extends GenericDaoJpa implements EstudioDao{
   }
 
   @Override
+  public List<Estudio> findAllByUniversidad(Long uniId) {
+    return entityManager.createQuery("select e from Estudio e join e.universidad uni where uni.idUniversidad = :uniId", Estudio.class).setParameter("uniId", uniId).getResultList();
+  }
+  @Override
   public void create(Estudio estudio) {
     entityManager.persist(estudio);
   }
+
+
 }

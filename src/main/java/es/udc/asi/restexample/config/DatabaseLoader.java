@@ -62,18 +62,22 @@ public class DatabaseLoader {
 
     Universidad conruna = new Universidad("Universidade de A Coruña");
     Universidad santiago = new Universidad("Universidade de Santiago de Compostela");
-    Universidad orense = new Universidad("Universidade de Ourense");
+    Universidad vigo = new Universidad("Universidade de Vigo");
 
 
     universidadDao.create(conruna);
     universidadDao.create(santiago);
-    universidadDao.create(orense);
+    universidadDao.create(vigo);
 
     Estudio gei_coruna = new Estudio("Grado en Ingenieria Informatica", universidadDao.findById(conruna.getIdUniversidad()));
+    Estudio gec_coruna = new Estudio("Grado en Ingenieria de Caminos", universidadDao.findById(conruna.getIdUniversidad()));
     Estudio gei_santiago = new Estudio("Grado en Ingenieria Informatica", universidadDao.findById(santiago.getIdUniversidad()));
+    Estudio bio_santiago = new Estudio("Grado en Biología", universidadDao.findById(santiago.getIdUniversidad()));
 
     estudioDao.create(gei_coruna);
+    estudioDao.create(gec_coruna);
     estudioDao.create(gei_santiago);
+    estudioDao.create(bio_santiago);
 
     User laura = new User ("laura", passwordEncoder.encode("laura"), "Laura Criado", "666333111", "laura.criado@udc.es",
       estudioDao.findById(gei_coruna.getIdEstudio()), UserAuthority.ADMIN);

@@ -188,12 +188,8 @@ public class UserService {
     return new UserDTOPublic(user);
   }
 
-  public List<UniversidadDTO> findAllUni() {
+  public List<UniversidadDTO> findAllUniversidades() {
     return universidadDAO.findAll().stream().map(universidad -> new UniversidadDTO(universidad)).collect(Collectors.toList());
-  }
-
-  public List<EstudioDTO> findAllEstudios() {
-    return estudioDAO.findAll().stream().map(estudio -> new EstudioDTO(estudio)).collect(Collectors.toList());
   }
 
 }

@@ -6,18 +6,27 @@ import es.udc.asi.restexample.model.service.dto.EstudioDTO;
 import es.udc.asi.restexample.web.exceptions.RequestBodyNotValidException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/estudios")
 public class EstudioResource {
   @Autowired
   private EstudioService estudioService;
+
+  @GetMapping
+  public List<EstudioDTO> findAllEstudios() {
+    return estudioService.findAllEstudios();
+  }
+
+
+  @GetMapping("/universidad/{id}")
+  public List<EstudioDTO> findAllByUniversidad(@PathVariable Long id ) throws NotFoundException {
+    return estudioService.findAllByUniversidad(id);
+  }
 
   @PostMapping
   public EstudioDTO crear(@RequestBody @Valid EstudioDTO estudio, Errors errors) throws RequestBodyNotValidException, NotFoundException {

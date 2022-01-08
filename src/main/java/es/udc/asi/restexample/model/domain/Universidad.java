@@ -13,6 +13,7 @@ public class Universidad {
   @SequenceGenerator(name = "universidad_generator", sequenceName = "uni_seq")
   private Long idUniversidad;
 
+  @Column(unique = true)
   private String nombre;
 
   @OneToMany(mappedBy = "universidad")
