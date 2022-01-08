@@ -1,25 +1,34 @@
 package es.udc.asi.restexample.model.service.dto;
 
 import es.udc.asi.restexample.model.domain.Mensaje;
-import org.w3c.dom.Text;
 
 import java.time.LocalDateTime;
 
 public class MensajeDTO {
+  private Long id;
   private LocalDateTime fecha;
   private TextoMensajesDTO pregunta;
   private TextoMensajesDTO respuesta;
   private String texto;
-  private UserDTOPublic usuario;
+  private AnuncianteDTO usuario;
 
   public MensajeDTO(Mensaje mensaje) {
+    this.id = mensaje.getIdMensaje();
     this.fecha = mensaje.getFecha();
     this.texto = mensaje.getTexto();
-    this.usuario = new UserDTOPublic(mensaje.getUsuario());
+    this.usuario = new AnuncianteDTO(mensaje.getUsuario());
     if (mensaje.getPregunta() == null) this.pregunta = null;
     else this.pregunta = new TextoMensajesDTO(mensaje.getPregunta().getTexto());
     if (mensaje.getRespuesta() == null) this.respuesta = null;
     else this.respuesta = new TextoMensajesDTO(mensaje.getRespuesta().getTexto());
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public LocalDateTime getFecha() {
@@ -54,11 +63,11 @@ public class MensajeDTO {
     this.texto = texto;
   }
 
-  public UserDTOPublic getUsuario() {
+  public AnuncianteDTO getUsuario() {
     return usuario;
   }
 
-  public void setUsuario(UserDTOPublic usuario) {
+  public void setUsuario(AnuncianteDTO usuario) {
     this.usuario = usuario;
   }
 }

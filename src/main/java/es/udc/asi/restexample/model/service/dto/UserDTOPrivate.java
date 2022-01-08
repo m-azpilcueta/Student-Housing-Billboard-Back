@@ -5,6 +5,9 @@ import javax.validation.constraints.Size;
 
 import es.udc.asi.restexample.model.domain.User;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class UserDTOPrivate {
   private Long id;
 
@@ -29,6 +32,8 @@ public class UserDTOPrivate {
 
   private EstudioDTO estudio;
 
+  private Set<PisoDTO> favoritos = new HashSet<>();
+
   public UserDTOPrivate() {
   }
 
@@ -40,6 +45,11 @@ public class UserDTOPrivate {
     this.email = user.getEmail();
     this.estudio = new EstudioDTO(user.getEstudio());
     this.authority = user.getAuthority().name();
+    if (user.getFavoritos() != null) {
+      user.getFavoritos().forEach(
+        u -> this.favoritos.add(new PisoDTO(u))
+      );
+    }
   }
 
   public Long getId() {
@@ -104,5 +114,13 @@ public class UserDTOPrivate {
 
   public void setAuthority(String authority) {
     this.authority = authority;
+  }
+
+  public Set<PisoDTO> getFavoritos() {
+    return favoritos;
+  }
+
+  public void setFavoritos(Set<PisoDTO> favoritos) {
+    this.favoritos = favoritos;
   }
 }

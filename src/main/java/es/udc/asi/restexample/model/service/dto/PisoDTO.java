@@ -43,7 +43,7 @@ public class PisoDTO {
 
   private int personas;
 
-  private UserDTOPublic anunciante;
+  private AnuncianteDTO anunciante;
 
   private Set<ImagenDTO> imagenes = new HashSet<>();
 
@@ -70,12 +70,17 @@ public class PisoDTO {
     this.superficie = piso.getSuperficie();
     this.habitaciones = piso.getHabitaciones();
     this.personas = piso.getPersonas();
-    this.anunciante = new UserDTOPublic(piso.getAnunciante());
+    this.anunciante = new AnuncianteDTO(piso.getAnunciante());
     if (piso.getImagenes() != null) {
       piso.getImagenes().forEach(i -> this.imagenes.add(new ImagenDTO(i.getIdImagen(), i.getNombre(), i.getPath(), i.isPortada())));
     }
     if (piso.getMensajes() != null) {
-      piso.getMensajes().forEach(m -> this.mensajes.add(new MensajeDTO(m)));
+      piso.getMensajes().forEach(m ->
+        {
+          if (m.getPregunta() == null)
+            this.mensajes.add(new MensajeDTO(m));
+        }
+      );
     }
   }
 
@@ -211,11 +216,11 @@ public class PisoDTO {
     this.personas = personas;
   }
 
-  public UserDTOPublic getAnunciante() {
+  public AnuncianteDTO getAnunciante() {
     return anunciante;
   }
 
-  public void setAnunciante(UserDTOPublic anunciante) {
+  public void setAnunciante(AnuncianteDTO anunciante) {
     this.anunciante = anunciante;
   }
 

@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -30,8 +31,8 @@ public class PisoResource {
   PisoService pisoService;
 
   @GetMapping
-  public List<PisoDTO> findAll() {
-    return pisoService.findAll();
+  public List<PisoDTO> findAll(@RequestParam(required = false) String filter, @RequestParam(required = false) PisoSortType sort) {
+    return pisoService.findAll(filter, sort);
   }
 
   @GetMapping("/{id}")
@@ -101,13 +102,13 @@ public class PisoResource {
 
   @PostMapping("/{id}/imagenes")
   @ResponseStatus(HttpStatus.OK)
-  public void guardarImagenes(@PathVariable Long id, @RequestParam Set<MultipartFile> imagenes) throws NotFoundException, OperationNotAllowed {
+  public void guardarImagenes(@PathVariable Long id, @RequestParam MultipartFile imagen) throws NotFoundException, OperationNotAllowed {
     try {
       pisoService.findById(id);
     } catch (NotFoundException e) {
       throw new NotFoundException(id.toString(), Piso.class);
     }
-    pisoService.guardarImagenes(id, imagenes);
+    pisoService.guardarImagenes(id, imagen);
   }
 
   @GetMapping("/{id}/imagenes/{idImagen}")
@@ -134,6 +135,21 @@ public class PisoResource {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  @GetMapping("/{id}/imagenes")
+  public Set<ImagenDTO> listaImagenes(@PathVariable Long id) throws NotFoundException {
+    PisoDTO p;
+    try {
+      p = pisoService.findById(id);
+    } catch (NotFoundException e) {
+      throw new NotFoundException(id.toString(), Piso.class);
+    }
+    Set<ImagenDTO> i = new HashSet<>();
+    p.getImagenes().forEach(
+      im -> i.add(new ImagenDTO(im.getIdImagen(), im.getNombre(), im.getPath(), im.isPortada()))
+    );
+    return i;
   }
 
   @PutMapping("/{id}/imagenes/{idImagen}")

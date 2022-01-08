@@ -1,11 +1,12 @@
 package es.udc.asi.restexample.model.repository;
 
 import es.udc.asi.restexample.model.domain.Piso;
+import es.udc.asi.restexample.model.service.dto.PisoSortType;
 
 import java.util.List;
 
 public interface PisoDao {
-  List<Piso> findAll();
+  List<Piso> findAll(String filter, PisoSortType sort);
 
   Piso findById(Long id);
 
