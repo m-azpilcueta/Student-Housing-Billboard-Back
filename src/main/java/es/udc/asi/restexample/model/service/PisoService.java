@@ -43,8 +43,8 @@ public class PisoService {
   @Autowired
   private ImageService imageService;
 
-  public List<PisoDTO> findAll(PisoSortType sort) {
-    return pisoDao.findAll(sort).stream().map(piso -> new PisoDTO(piso)).collect(Collectors.toList());
+  public List<PisoDTO> findAll(String filter, PisoSortType sort) {
+    return pisoDao.findAll(filter, sort).stream().map(piso -> new PisoDTO(piso)).collect(Collectors.toList());
   }
 
   public PisoDTO findById(Long id) throws NotFoundException {

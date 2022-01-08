@@ -11,8 +11,14 @@ import java.util.List;
 @Repository
 public class PisoDaoJpa extends GenericDaoJpa implements PisoDao {
   @Override
-  public List<Piso> findAll(PisoSortType sort) {
+  public List<Piso> findAll(String filter, PisoSortType sort) {
     String queryStr = "select p from Piso p";
+
+    if (filter != null) {
+      filter = filter.substring(1, filter.length() - 1);
+      queryStr += " where " + filter;
+    }
+
     String sortStr = "p.fechaPublicacion desc";
     if (sort != null) {
       switch (sort) {

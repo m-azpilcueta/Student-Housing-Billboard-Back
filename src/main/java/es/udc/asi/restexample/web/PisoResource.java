@@ -31,8 +31,8 @@ public class PisoResource {
   PisoService pisoService;
 
   @GetMapping
-  public List<PisoDTO> findAll(@RequestParam(required = false) PisoSortType sort) {
-    return pisoService.findAll(sort);
+  public List<PisoDTO> findAll(@RequestParam(required = false) String query, @RequestParam(required = false) PisoSortType sort) {
+    return pisoService.findAll(query, sort);
   }
 
   @GetMapping("/{id}")

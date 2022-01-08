@@ -6,7 +6,7 @@ import es.udc.asi.restexample.model.service.dto.PisoSortType;
 import java.util.List;
 
 public interface PisoDao {
-  List<Piso> findAll(PisoSortType sort);
+  List<Piso> findAll(String filter, PisoSortType sort);
 
   Piso findById(Long id);
 
