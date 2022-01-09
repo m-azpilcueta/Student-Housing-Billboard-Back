@@ -7,6 +7,7 @@ import es.udc.asi.restexample.model.domain.Piso;
 import es.udc.asi.restexample.model.domain.User;
 import es.udc.asi.restexample.model.exception.NotFoundException;
 import es.udc.asi.restexample.model.exception.OperationNotAllowed;
+import es.udc.asi.restexample.model.service.dto.EstudioDTO;
 import es.udc.asi.restexample.model.service.dto.PisoDTO;
 import es.udc.asi.restexample.model.service.dto.UserDTOPrivate;
 import es.udc.asi.restexample.web.exceptions.IdAndBodyNotMatchingOnUpdateException;
@@ -32,6 +33,11 @@ public class UserResource {
   @GetMapping
   public List<UserDTOPublic> findAll() {
     return userService.findAll();
+  }
+
+  @GetMapping("/{id}/pisos")
+  public List<PisoDTO> findAllPisosByAnunciante(@PathVariable Long id) throws NotFoundException {
+    return userService.findAllPisosByAnunciante(id);
   }
 
   @GetMapping("/{id}")

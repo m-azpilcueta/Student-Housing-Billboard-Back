@@ -8,6 +8,8 @@ import java.util.List;
 public interface PisoDao {
   List<Piso> findAll(String filter, PisoSortType sort);
 
+  List<Piso> findAllPisosByAnunciante(Long id);
+
   Piso findById(Long id);
 
   void create(Piso piso);

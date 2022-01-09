@@ -42,6 +42,15 @@ public class UserService {
     return userDAO.findAll().stream().map(user -> new UserDTOPublic(user)).collect(Collectors.toList());
   }
 
+  public List<PisoDTO> findAllPisosByAnunciante(Long id) throws NotFoundException {
+    User anunciante = userDAO.findById(id);
+    if (anunciante == null){
+      throw new NotFoundException(id.toString(), User.class);
+    }
+    return pisoDAO.findAllPisosByAnunciante(id).stream().map(piso -> new PisoDTO(piso)).collect(Collectors.toList());
+
+  }
+
   public UserDTOPublic findById(Long id) throws NotFoundException {
     User user = userDAO.findById(id);
     if (user == null) {

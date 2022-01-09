@@ -1,5 +1,6 @@
 package es.udc.asi.restexample.model.repository;
 
+import es.udc.asi.restexample.model.domain.Estudio;
 import es.udc.asi.restexample.model.domain.Piso;
 import es.udc.asi.restexample.model.repository.util.GenericDaoJpa;
 import es.udc.asi.restexample.model.service.dto.PisoSortType;
@@ -41,6 +42,10 @@ public class PisoDaoJpa extends GenericDaoJpa implements PisoDao {
     return query.getResultList();
   }
 
+  @Override
+  public List<Piso> findAllPisosByAnunciante(Long userId) {
+    return entityManager.createQuery("select p from Piso p join p.anunciante anun where anun.idUsuario= :userId", Piso.class).setParameter("userId", userId).getResultList();
+  }
   @Override
   public Piso findById(Long id) {
     List<Piso> pisos = entityManager.createQuery("from Piso p where p.idPiso=:id AND p.anunciante.active = TRUE", Piso.class).setParameter("id", id).getResultList();
