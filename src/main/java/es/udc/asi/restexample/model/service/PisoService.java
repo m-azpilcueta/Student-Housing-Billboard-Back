@@ -93,7 +93,7 @@ public class PisoService {
 
   @PreAuthorize("hasAuthority('USER')")
   @Transactional(readOnly = false)
-  public PisoDTO responder(Long idPiso, Long idPregunta, TextoMensajesDTO respuesta) throws NotFoundException, OperationNotAllowed {
+  public MensajeDTO responder(Long idPiso, Long idPregunta, TextoMensajesDTO respuesta) throws NotFoundException, OperationNotAllowed {
     Piso p = pisoDao.findById(idPiso);
     if (mensajeDao.find(idPregunta) == null) throw new NotFoundException(idPregunta.toString(), Mensaje.class);
     UserDTOPrivate currentUser = userService.getCurrentUserWithAuthority();
@@ -110,7 +110,7 @@ public class PisoService {
     mensajeDao.update(preg);
     p.getMensajes().add(m);
     pisoDao.update(p);
-    return new PisoDTO(p);
+    return new MensajeDTO(mensajeDao.find(idPregunta));
   }
 
   @PreAuthorize("isAuthenticated()")
@@ -132,6 +132,7 @@ public class PisoService {
   @Transactional(readOnly = false)
   public PisoDTO borrarMensajes(Long idPiso, Long idMensaje) throws NotFoundException, OperationNotAllowed {
     Mensaje m = mensajeDao.find(idMensaje);
+    Mensaje resp = mensajeDao.findRespuesta(m.getIdMensaje());
     if (m == null) throw new NotFoundException(idMensaje.toString(), Mensaje.class);
     UserDTOPrivate currentUser = userService.getCurrentUserWithAuthority();
     if (!currentUser.getId().equals(m.getUsuario().getIdUsuario()) & !currentUser.getAuthority().equalsIgnoreCase("ADMIN")) {
@@ -144,8 +145,22 @@ public class PisoService {
         break;
       }
     }
+    if (resp != null) {
+      for (Mensaje mens : p.getMensajes()) {
+        if (resp.getIdMensaje() == mens.getIdMensaje()) {
+          p.getMensajes().remove(mens);
+          break;
+        }
+      }
+      pisoDao.update(p);
+      resp.setRespuesta(null);
+      resp.setPregunta(null);
+      mensajeDao.update(resp);
+      mensajeDao.delete(resp);
+    }
     pisoDao.update(p);
     m.setPregunta(null);
+    m.setRespuesta(null);
     mensajeDao.update(m);
     mensajeDao.delete(m);
     return new PisoDTO(p);

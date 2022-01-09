@@ -62,7 +62,7 @@ public class PisoResource {
   }
 
   @PostMapping("/{id}/preguntas/{pregunta}")
-  public PisoDTO responder(@PathVariable Long id, @PathVariable Long pregunta, @RequestBody @Valid TextoMensajesDTO respuesta, Errors errors) throws RequestBodyNotValidException, NotFoundException, IdAndBodyNotMatchingOnUpdateException, OperationNotAllowed {
+  public MensajeDTO responder(@PathVariable Long id, @PathVariable Long pregunta, @RequestBody @Valid TextoMensajesDTO respuesta, Errors errors) throws RequestBodyNotValidException, NotFoundException, IdAndBodyNotMatchingOnUpdateException, OperationNotAllowed {
     if (errors.hasErrors()) {
       throw new RequestBodyNotValidException(errors);
     }

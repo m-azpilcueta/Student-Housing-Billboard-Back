@@ -7,4 +7,5 @@ public interface MensajeDao {
   Mensaje find(Long id);
   void update(Mensaje mensaje);
   void delete(Mensaje mensaje);
+  Mensaje findRespuesta(Long idPregunta);
 }
