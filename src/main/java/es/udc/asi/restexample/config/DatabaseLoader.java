@@ -2,14 +2,11 @@ package es.udc.asi.restexample.config;
 
 import javax.annotation.PostConstruct;
 
-import es.udc.asi.restexample.model.domain.Estudio;
-import es.udc.asi.restexample.model.domain.Universidad;
-import es.udc.asi.restexample.model.domain.User;
-import es.udc.asi.restexample.model.domain.UserAuthority;
+import es.udc.asi.restexample.model.domain.*;
 import es.udc.asi.restexample.model.repository.EstudioDao;
+import es.udc.asi.restexample.model.repository.PisoDao;
 import es.udc.asi.restexample.model.repository.UniversidadDao;
 import es.udc.asi.restexample.model.repository.UserDao;
-import es.udc.asi.restexample.model.service.dto.UserDTOPrivate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.udc.asi.restexample.model.exception.UserLoginExistsException;
-import es.udc.asi.restexample.model.service.UserService;
+
+import java.time.LocalDate;
 
 @Configuration
 public class DatabaseLoader {
@@ -34,7 +32,7 @@ public class DatabaseLoader {
   private UniversidadDao universidadDao;
 
   @Autowired
-  private UserService userService;
+  private PisoDao pisoDao;
 
   @Autowired
   private DatabaseLoader databaseLoader;
@@ -64,21 +62,23 @@ public class DatabaseLoader {
     Universidad santiago = new Universidad("Universidade de Santiago de Compostela");
     Universidad vigo = new Universidad("Universidade de Vigo");
 
-
     universidadDao.create(conruna);
     universidadDao.create(santiago);
     universidadDao.create(vigo);
 
     Estudio gei_coruna = new Estudio("Grado en Ingenieria Informatica", universidadDao.findById(conruna.getIdUniversidad()));
     Estudio gec_coruna = new Estudio("Grado en Ingenieria de Caminos", universidadDao.findById(conruna.getIdUniversidad()));
+    Estudio qui_coruna = new Estudio("Grado en Quimica", universidadDao.findById(conruna.getIdUniversidad()));
     Estudio gei_santiago = new Estudio("Grado en Ingenieria Informatica", universidadDao.findById(santiago.getIdUniversidad()));
     Estudio bio_santiago = new Estudio("Grado en Biología", universidadDao.findById(santiago.getIdUniversidad()));
 
     estudioDao.create(gei_coruna);
     estudioDao.create(gec_coruna);
+    estudioDao.create(qui_coruna);
     estudioDao.create(gei_santiago);
     estudioDao.create(bio_santiago);
 
+    //Usuarios administradores
     User laura = new User ("laura", passwordEncoder.encode("laura"), "Laura Criado", "666333111", "laura.criado@udc.es",
       estudioDao.findById(gei_coruna.getIdEstudio()), UserAuthority.ADMIN);
     User martin = new User ("martin", passwordEncoder.encode("martin"), "Martin Azpilcueta", "666444222", "m.azpilcueta@udc.es",
@@ -86,6 +86,31 @@ public class DatabaseLoader {
 
     userDao.create(laura);
     userDao.create(martin);
+
+    User adrian = new User ("adrian.pazos", passwordEncoder.encode("adrian"), "Adrian Pazos Perez", "696358758", "adrian.pazos@usc.es",
+      estudioDao.findById(gei_santiago.getIdEstudio()), UserAuthority.USER);
+    User lorena = new User ("lorena.gg", passwordEncoder.encode("lorena"), "Lorena Garcia Gonzalez", "698136229", "lorena.gg@usc.es",
+      estudioDao.findById(qui_coruna.getIdEstudio()), UserAuthority.USER);
+
+    userDao.create(adrian);
+    userDao.create(lorena);
+
+    Piso piso_adrian = new Piso(true, "Rua das Rodas", "Piso en en el centro de Santiago", "15704", "El piso ha sido renovado recientemente",
+      true, 225, "29", "Bajo A", 65, 3, 3 );
+
+    piso_adrian.setAnunciante(userDao.findById(adrian.getIdUsuario()));
+    piso_adrian.setLocalidad(Localidad.SANTIAGO);
+    piso_adrian.setProvincia(Provincia.CORUÑA);
+
+    Piso piso_lorena = new Piso(true, "Rúa Ría do Ferrol", "Piso en Arteixo amueblado", "15142", "Incluye gastos de comunidad y agua",
+      true, 150, "13", "2 D", 50, 3, 2 );
+
+    piso_lorena.setAnunciante(userDao.findById(lorena.getIdUsuario()));
+    piso_lorena.setLocalidad(Localidad.ARTEIXO);
+    piso_lorena.setProvincia(Provincia.CORUÑA);
+
+    pisoDao.create(piso_adrian);
+    pisoDao.create(piso_lorena);
 
   }
 }
