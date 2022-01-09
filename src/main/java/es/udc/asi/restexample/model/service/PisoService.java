@@ -115,7 +115,7 @@ public class PisoService {
 
   @PreAuthorize("isAuthenticated()")
   @Transactional(readOnly = false)
-  public PisoDTO modificarMensaje(Long idPiso, Long idMensaje, ActualizarMensajeDTO texto) throws OperationNotAllowed, NotFoundException {
+  public PisoDTO modificarMensaje(Long idPiso, Long idMensaje, TextoMensajesDTO texto) throws OperationNotAllowed, NotFoundException {
     Mensaje m = mensajeDao.find(idMensaje);
     if (m == null) throw new NotFoundException(idMensaje.toString(), Mensaje.class);
     UserDTOPrivate currentUser = userService.getCurrentUserWithAuthority();
@@ -144,6 +144,9 @@ public class PisoService {
         break;
       }
     }
+    pisoDao.update(p);
+    m.setPregunta(null);
+    mensajeDao.update(m);
     mensajeDao.delete(m);
     return new PisoDTO(p);
   }
@@ -242,7 +245,7 @@ public class PisoService {
     Piso p = pisoDao.findById(id);
     if (p == null) throw new NotFoundException(id.toString(), Piso.class);
     UserDTOPrivate currentUser = userService.getCurrentUserWithAuthority();
-    if (!currentUser.getId().equals(p.getAnunciante().getIdUsuario())) {
+    if (!currentUser.getId().equals(p.getAnunciante().getIdUsuario()) & !currentUser.getAuthority().equalsIgnoreCase("ADMIN")) {
       throw new OperationNotAllowed("Current user does not match piso creator");
     }
     pisoDao.delete(p);

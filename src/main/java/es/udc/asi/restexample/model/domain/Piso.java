@@ -50,7 +50,7 @@ public class Piso {
   inverseJoinColumns = @JoinColumn(name = "id_imagen", nullable = false))
   private Set<Imagen> imagenes;
 
-  @OneToMany (fetch =  FetchType.LAZY )
+  @OneToMany (fetch =  FetchType.LAZY, cascade = CascadeType.REMOVE)
   @JoinTable(name = "thePisosMensajes",
   joinColumns = @JoinColumn(name = "id_piso", nullable = false),
   inverseJoinColumns = @JoinColumn(name = "id_mensaje", nullable = false))

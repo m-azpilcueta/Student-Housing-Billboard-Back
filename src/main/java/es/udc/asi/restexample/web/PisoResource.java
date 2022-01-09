@@ -75,7 +75,7 @@ public class PisoResource {
   }
 
   @PutMapping("/{id}/preguntas/{idMensaje}")
-  public PisoDTO modificarMensaje(@PathVariable Long id, @PathVariable Long idMensaje, @RequestBody @Valid ActualizarMensajeDTO mensaje, Errors errors) throws RequestBodyNotValidException, NotFoundException, OperationNotAllowed, IdAndBodyNotMatchingOnUpdateException {
+  public PisoDTO modificarMensaje(@PathVariable Long id, @PathVariable Long idMensaje, @RequestBody @Valid TextoMensajesDTO mensaje, Errors errors) throws RequestBodyNotValidException, NotFoundException, OperationNotAllowed, IdAndBodyNotMatchingOnUpdateException {
     if (errors.hasErrors()) {
       throw new RequestBodyNotValidException(errors);
     }
@@ -84,7 +84,7 @@ public class PisoResource {
     } catch (NotFoundException e) {
       throw new NotFoundException(id.toString(), Piso.class);
     }
-    if (idMensaje != mensaje.getIdMensaje()) {
+    if (idMensaje != mensaje.getId()) {
       throw new IdAndBodyNotMatchingOnUpdateException(Mensaje.class);
     }
     return pisoService.modificarMensaje(id, idMensaje, mensaje);

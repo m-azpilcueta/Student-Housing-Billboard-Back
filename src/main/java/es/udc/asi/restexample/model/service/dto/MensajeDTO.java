@@ -18,9 +18,9 @@ public class MensajeDTO {
     this.texto = mensaje.getTexto();
     this.usuario = new AnuncianteDTO(mensaje.getUsuario());
     if (mensaje.getPregunta() == null) this.pregunta = null;
-    else this.pregunta = new TextoMensajesDTO(mensaje.getPregunta().getTexto());
+    else this.pregunta = new TextoMensajesDTO(mensaje.getPregunta().getIdMensaje(), mensaje.getPregunta().getTexto());
     if (mensaje.getRespuesta() == null) this.respuesta = null;
-    else this.respuesta = new TextoMensajesDTO(mensaje.getRespuesta().getTexto());
+    else this.respuesta = new TextoMensajesDTO(mensaje.getRespuesta().getIdMensaje(), mensaje.getRespuesta().getTexto());
   }
 
   public Long getId() {
