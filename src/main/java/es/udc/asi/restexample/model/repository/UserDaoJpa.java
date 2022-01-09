@@ -39,4 +39,9 @@ public class UserDaoJpa extends GenericDaoJpa implements UserDao {
   public void update(User user) {
     entityManager.merge(user);
   }
+
+  @Override
+  public void delete(User user) {
+    entityManager.remove(user);
+  }
 }

@@ -195,4 +195,20 @@ public class UserService {
     userDAO.update(user);
     return new UserDTOPublic(user);
   }
+
+  @PreAuthorize("hasAuthority('ADMIN')")
+  @Transactional(readOnly = false)
+  public void borrarUsuario(Long id) throws NotFoundException, OperationNotAllowed {
+    User user = userDAO.findById(id);
+    if (user == null) {
+      throw new NotFoundException(id.toString(), User.class);
+    }
+    UserDTOPrivate currentUser = getCurrentUserWithAuthority();
+    if (currentUser.getId().equals(user.getIdUsuario())) {
+      throw new OperationNotAllowed("The user cannot delete itself");
+    }
+    user.setFavoritos(null);
+    userDAO.update(user);
+    userDAO.delete(user);
+  }
 }

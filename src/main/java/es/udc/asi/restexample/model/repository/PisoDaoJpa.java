@@ -13,11 +13,12 @@ import java.util.List;
 public class PisoDaoJpa extends GenericDaoJpa implements PisoDao {
   @Override
   public List<Piso> findAll(String filter, PisoSortType sort) {
-    String queryStr = "select p from Piso p";
+    String queryStr = "select p from Piso p where anunciante.active is true ";
 
     if (filter != null) {
+      queryStr += "and ";
       filter = filter.substring(1, filter.length() - 1);
-      queryStr += " where " + filter;
+      queryStr += filter;
     }
 
     String sortStr = "p.fechaPublicacion desc";
@@ -44,7 +45,7 @@ public class PisoDaoJpa extends GenericDaoJpa implements PisoDao {
 
   @Override
   public List<Piso> findAllPisosByAnunciante(Long userId) {
-    return entityManager.createQuery("select p from Piso p join p.anunciante anun where anun.idUsuario= :userId", Piso.class).setParameter("userId", userId).getResultList();
+    return entityManager.createQuery("select p from Piso p join p.anunciante anun where anun.idUsuario= :userId order by p.fechaPublicacion desc", Piso.class).setParameter("userId", userId).getResultList();
   }
   @Override
   public Piso findById(Long id) {

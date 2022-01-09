@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import es.udc.asi.restexample.model.service.UserService;
 import es.udc.asi.restexample.model.service.dto.UserDTOPublic;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -67,8 +66,10 @@ public class UserResource {
     return userService.updateActive(id, false);
   }
 
-  //HU26. Borrar usuario
-
+  @DeleteMapping("/{id}")
+  public void delete(@PathVariable Long id) throws NotFoundException, OperationNotAllowed {
+    userService.borrarUsuario(id);
+  }
 
   @PutMapping("/{id}/favoritos")
   @ResponseStatus(HttpStatus.OK)
