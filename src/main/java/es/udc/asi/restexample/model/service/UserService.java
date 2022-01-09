@@ -134,13 +134,6 @@ public class UserService {
       user.setAuthority(UserAuthority.ADMIN);
     }
 
-    /*if (account.getEstudio().getIdEstudio() == null ) {
-      EstudioDTO actualizado = createEstudio(account.getEstudio());
-      user.setEstudio(estudioDAO.findById(actualizado.getIdEstudio()));
-    } else {
-      user.setEstudio(estudioDAO.findById(account.getEstudio().getIdEstudio()));
-    }*/
-
     userDAO.create(user);
   }
 
@@ -178,7 +171,7 @@ public class UserService {
 
   @PreAuthorize("hasAuthority('USER')")
   @Transactional(readOnly = false)
-  public UserDTOPublic borrarFavorito(Long id, Long idPiso) throws NotFoundException, OperationNotAllowed {
+  public UserDTOPublic borrarFavorito(Long id, Long idPiso) throws NotFoundException {
     User user = userDAO.findById(id);
 
     if (user == null) {

@@ -1,8 +1,7 @@
 package es.udc.asi.restexample.config;
 
-import javax.annotation.PostConstruct;
-
 import es.udc.asi.restexample.model.domain.*;
+import es.udc.asi.restexample.model.exception.UserLoginExistsException;
 import es.udc.asi.restexample.model.repository.EstudioDao;
 import es.udc.asi.restexample.model.repository.PisoDao;
 import es.udc.asi.restexample.model.repository.UniversidadDao;
@@ -14,9 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
-import es.udc.asi.restexample.model.exception.UserLoginExistsException;
-
-import java.time.LocalDate;
+import javax.annotation.PostConstruct;
 
 @Configuration
 public class DatabaseLoader {
